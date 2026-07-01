@@ -1,0 +1,541 @@
+/* GLOBAL */
+@keyframes transitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition {
+  animation: transitionIn 0.75s;
+}
+
+body {
+  font-family: "Young Serif", serif;
+  background-color: rgb(18, 18, 18);
+}
+
+.sec-bg {
+  background: linear-gradient(135deg, rgb(43, 43, 73), rgb(27, 27, 70));
+}
+
+.txt-color {
+  color: rgb(229, 231, 235);
+}
+
+.txt-sec-color {
+  font-size: 1.2rem;
+  color: rgb(180, 180, 190);
+  font-family: "EB Garamond", garamond;
+}
+
+h3 {
+  overflow: hidden;
+}
+
+section {
+  padding: 60px 30px;
+}
+
+.sect-heading {
+  text-align: center;
+  font-size: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.sect-heading:hover {
+  transform: translateY(-5px), scale(0.5);
+  color: rgb(167, 139, 250);
+}
+.sect-heading::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 3px;
+  background: rgb(167, 139, 250);
+  margin: 15px auto;
+  border-radius: 10px;
+}
+
+@media (max-width: 426px) {
+  .sect-heading {
+    font-size: 1.5rem;
+  }
+}
+
+.form-control {
+  border: none;
+  background-color: rgb(43, 43, 73);
+  color: rgb(229, 231, 235);
+}
+.form-control::placeholder {
+  color: rgb(180, 180, 190);
+}
+
+.form-control:focus {
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+}
+
+.btn {
+  padding: 5px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: rgb(167, 139, 250);
+  border-color: rgb(167, 139, 250);
+}
+
+img {
+  transition: all 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.05);
+}
+
+/* NAVBAR */
+.navbar {
+  padding: 10px;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: translateY(-2px);
+  color: rgb(167, 139, 250);
+}
+
+.nav-item {
+  margin: 0px 20px;
+}
+
+/* HOMEPAGE */
+#Title {
+  padding: 0;
+  overflow: hidden;
+}
+
+#Title .row {
+  align-items: center;
+}
+
+.heading {
+  font-size: 3.7rem;
+  margin: 30px 0 10px 0;
+}
+
+.heading a {
+  text-decoration: none;
+  color: rgb(200, 200, 210);
+  transition: all ease 0.3s;
+}
+
+.heading a:hover {
+  color: rgb(167, 139, 250);
+}
+
+@media (max-width: 450px) {
+  .heading {
+    font-size: 2rem;
+  }
+}
+
+.title-img {
+  width: 140%;
+  object-fit: cover;
+  clip-path: polygon(0% 0%, 70% 0%, 100% 100%, 30% 100%);
+}
+.rcm-book {
+  width: 100%;
+  max-width: 140px;
+  max-height: 200px;
+  margin: 10px 0;
+  border-radius: 5px;
+  transition: all ease 0.3s;
+}
+
+.rcm-book:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+/* Desktop */
+@media (max-width: 992px) {
+  .rcm-book {
+    width: 100px;
+    height: 150px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  .rcm-book {
+    width: 90px;
+    height: 125px;
+  }
+}
+
+/* Phone */
+@media (max-width: 406px) {
+  .rcm-book {
+    width: 70px;
+    height: 100px;
+  }
+}
+
+.carousel-control-prev {
+  width: 5%;
+  height: 100%;
+}
+
+.carousel-control-next {
+  width: 5%;
+  height: 100%;
+}
+
+.rcm-link h3 {
+  margin: 20px 0 0 0;
+  text-align: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+.rcm-link:hover h3 {
+  color: rgb(167, 139, 250);
+  text-align: center;
+  transform: translateY(-5px) scale(1.01);
+}
+
+#Reviews .review-card {
+  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
+  padding: 50px 30px 0 30px;
+  margin: 20px;
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+#Reviews .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+@media (max-width: 426px) {
+  #Reviews .review-card {
+    background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0px;
+  }
+}
+
+#Reviews .review-book {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+#Reviews .review-text {
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+#Reviews .review-user {
+  color: rgb(167, 139, 250);
+  font-weight: bold;
+}
+
+#Reviews .review-link h3 {
+  margin: 20px 0 0 0;
+  text-align: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+#Reviews .review-link:hover h3 {
+  color: rgb(167, 139, 250);
+  text-align: center;
+  transform: translateY(-5px) scale(1.01);
+}
+
+#Reviews .stars {
+  color: gold;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 25px 30px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.game-card .btn {
+  margin-top: auto;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+.game-card h4 {
+  margin-bottom: 10px;
+}
+
+/* RECOMMENDATION */
+.div-filter {
+  margin: 1rem;
+  justify-content: center;
+}
+
+.form-select {
+  background-color: rgb(30, 30, 46);
+  border: none;
+  color: rgb(200, 200, 210);
+}
+
+.results {
+  height: 130px;
+}
+
+.featured-book {
+  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
+  padding: 25px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.featured-book:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+.featured-img {
+  margin: 10px;
+  width: 120px;
+  border-radius: 10px;
+}
+
+@media (max-width: 426px) {
+  .featured-book {
+    text-align: center;
+  }
+}
+
+/* REVIEW */
+#Book-reviews .review-card {
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 20px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+#Book-reviews .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+#Book-reviews .review-book {
+  margin: 0 20px 0 0;
+  width: 70px;
+  border-radius: 5px;
+}
+
+#Book-reviews .review-user {
+  color: rgb(167, 139, 250);
+  font-size: 0.85rem;
+}
+
+#Book-reviews .review-text {
+  color: rgb(200, 200, 210);
+  font-size: 0.9rem;
+}
+
+.search-bar {
+  margin: 20px 0;
+  background-color: rgb(30, 30, 46);
+}
+
+#Book-reviews .stars {
+  color: gold;
+}
+
+#Write .form {
+  margin: 10px;
+}
+#Write .form label {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+#Write .star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+#Write .star-rating i {
+  font-size: 24px;
+  color: gray;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#Write .star-rating i:hover,
+#Write .star-rating i:hover ~ i {
+  color: gold;
+}
+
+textarea {
+  resize: none;
+}
+
+/* GAMES AND QUIZZES */
+
+#Games .game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 25px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+#Games .game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+#Quizzes .quiz-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
+  padding: 25px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+#Quizzes .quiz-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+#Quizzes .btn {
+  margin-top: auto;
+}
+#Games .btn {
+  margin-top: auto;
+}
+/* FOOTER */
+footer {
+  padding: 30px;
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 3px;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: rgb(200, 200, 210);
+  transition: all ease 0.3s;
+  font-family: "EB Garamond", garamond;
+}
+
+.footer-links a:hover {
+  color: rgb(167, 139, 250);
+}
+
+.social-icons i {
+  font-size: 1.4rem;
+  margin-right: 10px;
+  color: rgb(200, 200, 210);
+  cursor: pointer;
+}
+
+.social-icons i:hover {
+  color: rgb(167, 139, 250);
+}
+
+/* Book001 */
+
+.book-img img {
+  width: 250px;
+  border-radius: 10px;
+}
+
+.book-title {
+  font-size: 3rem;
+}
+
+.author {
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 24px;
+  color: greenyellow;
+  margin: 10px 0;
+}
+.description {
+  margin: 20px 0;
+}
+
+/* Coming-soon */
+#Coming-soon-title {
+  height: 56vh;
+}
+/* book001 reviews */
+#book001 .heading {
+  transition: all 0.3s ease;
+}
+
+#book001 .heading:hover {
+  transform: translateY(-2px);
+  color: rgb(167, 139, 250);
+}
+
+#book001 .review-card {
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  color: rgb(229, 231, 235);
+  transition: all 0.3s ease;
+}
+
+#book001 .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+#book001 .review-card i {
+  color: gold;
+}
+#book001 .review-btn {
+  margin: 20px 0 0 0;
+}
