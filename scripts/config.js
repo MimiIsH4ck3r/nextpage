@@ -11,12 +11,18 @@ window.signIn = () => {};
 //// Nếu người dùng đăng đăng nhập.
 if (localStorage.getItem("currentUser")) {
   document.querySelector("#profile-container").innerHTML += /*html*/ `
-    <div tabindex="0" class="avatar">
-      <img src="" />
-      <div class="popup">
-        <button class="action-button" onclick="handleSignOut()">
+    <div tabindex="0" class="profile">
+      <img src="./assets/default-profile-picture.jpg" alt="Profile picture">
+      <nav class="popup">
+        <button class="profile-button" onclick=""> 
+          <i class=""></i>
+          <span> Profile</span>
+        </button> 
+        <button class="profile-button" onclick="handleSignOut()"> 
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span> Logout</span>
         </button>
-      </div>
+      </nav>
     </div>
   `;
 } else {

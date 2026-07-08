@@ -5,6 +5,14 @@ const result = document.getElementById("results");
 const searchQuery = new URLSearchParams(location.search);
 const query = searchQuery.get("q")?.trim();
 
+function shortenDescription(des) {
+  if (des.length > 200) {
+    let newDes =
+      des.slice(0, 200) + ' ... \n (click "view details" to see more)';
+    return newDes;
+  }
+}
+
 async function searchBooks() {
   if (query) {
     const response =
@@ -34,7 +42,9 @@ async function searchBooks() {
             <div class="col-md-8">
               <h3 class="txt-color">${book.volumeInfo.title}</h3>
               <p class="txt-sec-color">${
-                book.volumeInfo.description ?? "No description available."
+                book.volumeInfo.description
+                  ? shortenDescription(book.volumeInfo.description)
+                  : "No description available."
               }</p>
 
               <a href="https://www.googleapis.com/books/v1/volumes" class="btn btn-outline-light">

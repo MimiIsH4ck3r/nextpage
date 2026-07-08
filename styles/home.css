@@ -1,0 +1,196 @@
+/* HOMEPAGE */
+#Title {
+  padding: 0;
+  overflow: hidden;
+}
+
+#Title .row {
+  align-items: center;
+}
+
+.heading {
+  font-size: 3.7rem;
+  margin: 30px 0 10px 0;
+}
+
+.heading a {
+  text-decoration: none;
+  color: rgb(200, 200, 210);
+  transition: all ease 0.3s;
+}
+
+.heading a:hover {
+  color: rgb(167, 139, 250);
+}
+
+@media (max-width: 450px) {
+  .heading {
+    font-size: 2rem;
+  }
+}
+
+.title-img {
+  width: 140%;
+  object-fit: cover;
+  clip-path: polygon(0% 0%, 70% 0%, 100% 100%, 30% 100%);
+}
+
+.carousel-row {
+  display: flex;
+  margin: 20px 0 50px 0;
+  align-items: center;
+}
+
+.carousel-row-title {
+  margin: 0 0 0 50px;
+}
+
+.carousel-row-title::after {
+  content: "";
+  display: block;
+  width: 250px;
+  height: 3px;
+  background: rgb(167, 139, 250);
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.rcm-book {
+  width: 100%;
+  max-width: 140px;
+  max-height: 200px;
+  margin: 10px 0;
+  border-radius: 5px;
+  transition: all ease 0.3s;
+}
+
+.rcm-book:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+/* Desktop */
+@media (max-width: 992px) {
+  .rcm-book {
+    width: 100px;
+    height: 150px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  .rcm-book {
+    width: 90px;
+    height: 125px;
+  }
+}
+
+/* Phone */
+@media (max-width: 406px) {
+  .rcm-book {
+    width: 70px;
+    height: 100px;
+  }
+}
+
+.carousel-control-prev {
+  width: 5%;
+}
+
+.carousel-control-next {
+  width: 5%;
+}
+
+.rcm-link h3 {
+  margin: 20px 0 0 0;
+  text-align: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+.rcm-link:hover h3 {
+  color: rgb(167, 139, 250);
+  text-align: center;
+  transform: translateY(-5px) scale(1.01);
+}
+
+#Reviews .review-card {
+  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
+  padding: 50px 30px 0 30px;
+  margin: 20px;
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+#Reviews .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+@media (max-width: 426px) {
+  #Reviews .review-card {
+    background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
+    border-radius: 10px;
+    padding: 10px;
+    margin: 0px;
+  }
+}
+
+#Reviews .review-book {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+#Reviews .review-text {
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+#Reviews .review-user {
+  color: rgb(167, 139, 250);
+  font-weight: bold;
+}
+
+#Reviews .review-link h3 {
+  margin: 20px 0 0 0;
+  text-align: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+#Reviews .review-link:hover h3 {
+  color: rgb(167, 139, 250);
+  text-align: center;
+  transform: translateY(-5px) scale(1.01);
+}
+
+#Reviews .stars {
+  color: gold;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 25px 30px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.game-card .btn {
+  margin-top: auto;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+.game-card h4 {
+  margin-bottom: 10px;
+}

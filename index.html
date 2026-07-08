@@ -22,6 +22,7 @@
     />
 
     <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="./styles/home.css" />
   </head>
   <body class="page-transition">
     <!-- Navbar -->
@@ -102,96 +103,12 @@
     <section id="Recommendations" class="sec-bg">
       <h3 class="sect-heading txt-color">Recommendations</h3>
       <p class="text-center txt-sec-color">Books you might like</p>
-      <div
+      <!-- <div
         id="carouselRecommendations"
         class="carousel slide"
         data-bs-ride="carousel"
       >
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center">
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book001.jpg" />
-                  </a>
-                </div>
-
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center">
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book002.jpg" />
-                  </a>
-                </div>
-
-                <div
-                  class="col-6 col-sm-4 col-md-3 col-lg-2 d-none d-sm-block text-center"
-                >
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book003.jpg" />
-                  </a>
-                </div>
-
-                <div
-                  class="col-6 col-sm-4 col-md-3 col-lg-2 d-none d-md-block text-center"
-                >
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book004.jpg" />
-                  </a>
-                </div>
-
-                <div
-                  class="col-6 col-sm-4 col-md-3 col-lg-2 d-none d-lg-block text-center"
-                >
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book005.jpg" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center">
-                  <a href="">
-                    <img class="rcm-book" src="./assets/book005.jpg" />
-                  </a>
-                </div>
-
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 text-center">
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book001.jpg" />
-                  </a>
-                </div>
-
-                <div
-                  class="col-6 col-sm-4 col-md-3 col-lg-2 d-none d-sm-block text-center"
-                >
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book002.jpg" />
-                  </a>
-                </div>
-
-                <div
-                  class="col-6 col-sm-4 col-md-3 col-lg-2 d-none d-md-block text-center"
-                >
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book003.jpg" />
-                  </a>
-                </div>
-
-                <div
-                  class="col-6 col-sm-4 col-md-3 col-lg-2 d-none d-lg-block text-center"
-                >
-                  <a href="./books.html">
-                    <img class="rcm-book" src="./assets/book004.jpg" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="testCarousel" class="carousel-item"></div>
-        </div>
+        <div class="carousel-inner"></div>
         <div>
           <a
             href="./recommendations.html"
@@ -218,6 +135,14 @@
           data-bs-slide="next"
         >
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+      </div> -->
+      <div id="rcm-sections"></div>
+      <div>
+        <a href="./recommendations.html" class="rcm-link text-decoration-none">
+          <h3 class="txt-color">
+            Start exploring now!<i class="fa-solid fa-angle-right"></i>
+          </h3>
         </a>
       </div>
     </section>
@@ -296,7 +221,8 @@
       </div>
     </section>
     <!-- Games and quizzes -->
-    <script src="./scripts/config.js"></script>
+    <script type="module" src="./scripts/config.js"></script>
+    <script type="module" src="./scripts/home.js"></script>
   </body>
 
   <!-- Footer -->

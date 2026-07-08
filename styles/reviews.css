@@ -1,0 +1,68 @@
+/* REVIEW */
+#Book-reviews .review-card {
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 20px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+#Book-reviews .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+
+#Book-reviews .review-book {
+  margin: 0 20px 0 0;
+  width: 70px;
+  border-radius: 5px;
+}
+
+#Book-reviews .review-user {
+  color: rgb(167, 139, 250);
+  font-size: 0.85rem;
+}
+
+#Book-reviews .review-text {
+  color: rgb(200, 200, 210);
+  font-size: 0.9rem;
+}
+
+.search-bar {
+  background-color: rgb(87, 87, 137);
+}
+
+#Book-reviews .stars {
+  color: gold;
+}
+
+#Write .form {
+  margin: 10px;
+}
+#Write .form label {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+#Write .star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+#Write .star-rating i {
+  font-size: 24px;
+  color: gray;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#Write .star-rating i:hover,
+#Write .star-rating i:hover ~ i {
+  color: gold;
+}
+
+textarea {
+  resize: none;
+}

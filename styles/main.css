@@ -118,293 +118,39 @@ img:hover {
   margin: 0px 20px;
 }
 
-/* HOMEPAGE */
-#Title {
-  padding: 0;
-  overflow: hidden;
+/* PROFILE */
+.profile {
+  cursor: pointer;
 }
 
-#Title .row {
-  align-items: center;
+.profile img {
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
 }
 
-.heading {
-  font-size: 3.7rem;
-  margin: 30px 0 10px 0;
-}
-
-.heading a {
-  text-decoration: none;
-  color: rgb(200, 200, 210);
-  transition: all ease 0.3s;
-}
-
-.heading a:hover {
-  color: rgb(167, 139, 250);
-}
-
-@media (max-width: 450px) {
-  .heading {
-    font-size: 2rem;
-  }
-}
-
-.title-img {
-  width: 140%;
-  object-fit: cover;
-  clip-path: polygon(0% 0%, 70% 0%, 100% 100%, 30% 100%);
-}
-.rcm-book {
-  width: 100%;
-  max-width: 140px;
-  max-height: 200px;
-  margin: 10px 0;
-  border-radius: 5px;
-  transition: all ease 0.3s;
-}
-
-.rcm-book:hover {
-  transform: scale(1.1);
-  transition: 0.3s;
-}
-/* Desktop */
-@media (max-width: 992px) {
-  .rcm-book {
-    width: 100px;
-    height: 150px;
-  }
-}
-
-/* Tablet */
-@media (max-width: 991px) {
-  .rcm-book {
-    width: 90px;
-    height: 125px;
-  }
-}
-
-/* Phone */
-@media (max-width: 406px) {
-  .rcm-book {
-    width: 70px;
-    height: 100px;
-  }
-}
-
-.carousel-control-prev {
-  width: 5%;
-  height: 100%;
-}
-
-.carousel-control-next {
-  width: 5%;
-  height: 100%;
-}
-
-.rcm-link h3 {
-  margin: 20px 0 0 0;
-  text-align: center;
-  font-size: 2rem;
-  transition: all 0.3s ease;
-}
-
-.rcm-link:hover h3 {
-  color: rgb(167, 139, 250);
-  text-align: center;
-  transform: translateY(-5px) scale(1.01);
-}
-
-#Reviews .review-card {
-  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
-  padding: 50px 30px 0 30px;
-  margin: 20px;
-  border-radius: 20px;
-  text-align: center;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-#Reviews .review-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
-}
-
-@media (max-width: 426px) {
-  #Reviews .review-card {
-    background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
-    border-radius: 10px;
-    padding: 10px;
-    margin: 0px;
-  }
-}
-
-#Reviews .review-book {
-  width: 120px;
-  height: auto;
-  margin-bottom: 20px;
-  border-radius: 10px;
-}
-
-#Reviews .review-text {
-  font-size: 0.9rem;
-  margin-top: 10px;
-}
-
-#Reviews .review-user {
-  color: rgb(167, 139, 250);
-  font-weight: bold;
-}
-
-#Reviews .review-link h3 {
-  margin: 20px 0 0 0;
-  text-align: center;
-  font-size: 2rem;
-  transition: all 0.3s ease;
-}
-
-#Reviews .review-link:hover h3 {
-  color: rgb(167, 139, 250);
-  text-align: center;
-  transform: translateY(-5px) scale(1.01);
-}
-
-#Reviews .stars {
-  color: gold;
-}
-
-.game-card {
+.popup {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
-  padding: 25px 30px;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-.game-card .btn {
-  margin-top: auto;
-}
-
-.game-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
-}
-
-.game-card h4 {
-  margin-bottom: 10px;
-}
-
-/* RECOMMENDATION */
-.div-filter {
-  margin: 1rem;
-  justify-content: center;
-}
-
-.form-select {
-  background-color: rgb(30, 30, 46);
-  border: none;
-  color: rgb(200, 200, 210);
-}
-
-.results {
-  height: 130px;
-}
-
-.featured-book {
-  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
-  padding: 25px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-.featured-book:hover {
-  transform: translateY(-5px);
-  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
-}
-
-.featured-img {
-  margin: 10px;
-  width: 120px;
-  border-radius: 10px;
-}
-
-@media (max-width: 426px) {
-  .featured-book {
-    text-align: center;
-  }
-}
-
-/* REVIEW */
-#Book-reviews .review-card {
-  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
-  padding: 20px;
-  border-radius: 15px;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-#Book-reviews .review-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
-}
-
-#Book-reviews .review-book {
-  margin: 0 20px 0 0;
-  width: 70px;
+  position: absolute;
+  right: 0;
   border-radius: 5px;
+  overflow: hidden;
+  width: 150px;
+  opacity: 0;
+  transition: 0.3s;
 }
 
-#Book-reviews .review-user {
-  color: rgb(167, 139, 250);
-  font-size: 0.85rem;
-}
-
-#Book-reviews .review-text {
-  color: rgb(200, 200, 210);
-  font-size: 0.9rem;
-}
-
-.search-bar {
-  margin: 20px 0;
-  background-color: rgb(30, 30, 46);
-}
-
-#Book-reviews .stars {
-  color: gold;
-}
-
-#Write .form {
-  margin: 10px;
-}
-#Write .form label {
-  margin-top: 15px;
-  margin-bottom: 5px;
-}
-
-#Write .star-rating {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-  margin-bottom: 10px;
-}
-
-#Write .star-rating i {
-  font-size: 24px;
-  color: gray;
+.popup .profile-button {
   cursor: pointer;
-  transition: 0.2s;
+  border: none;
+  padding: 5px 12px;
 }
 
-#Write .star-rating i:hover,
-#Write .star-rating i:hover ~ i {
-  color: gold;
-}
-
-textarea {
-  resize: none;
+.profile:focus .popup {
+  opacity: 1;
+  visibility: visible;
+  transform: 10;
 }
 
 /* GAMES AND QUIZZES */
