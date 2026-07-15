@@ -10,7 +10,7 @@ window.signIn = () => {};
 
 //// Nếu người dùng đăng đăng nhập.
 if (localStorage.getItem("currentUser")) {
-  document.querySelector("#profile-container").innerHTML += /*html*/ `
+  document.getElementById("profile-container").innerHTML += /*html*/ `
     <div tabindex="0" class="profile">
       <img src="./assets/default-profile-picture.jpg" alt="Profile picture">
       <nav class="popup">

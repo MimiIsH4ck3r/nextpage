@@ -113,28 +113,15 @@
   transform: translateY(-5px) scale(1.01);
 }
 
-#Reviews .review-card {
-  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
-  padding: 50px 30px 0 30px;
-  margin: 20px;
-  border-radius: 20px;
+#Reviews .card-light {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#Reviews .card-light h3 {
   text-align: center;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-#Reviews .review-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
-}
-
-@media (max-width: 426px) {
-  #Reviews .review-card {
-    background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
-    border-radius: 10px;
-    padding: 10px;
-    margin: 0px;
-  }
 }
 
 #Reviews .review-book {

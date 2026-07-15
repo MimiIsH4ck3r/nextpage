@@ -1,37 +1,22 @@
 /* RECOMMENDATION */
 .div-filter {
-  margin: 1rem;
+  margin: 15px;
   justify-content: center;
-}
-
-.form-select {
-  background-color: rgb(30, 30, 46);
-  border: none;
-  color: rgb(200, 200, 210);
 }
 
 .btn-genre {
   width: 100%;
-  text-align: start;
   display: flex;
   align-items: center;
 }
 
-.results {
-  height: 130px;
+.dropdown-menu {
+  padding: 10px;
+  overflow: auto;
 }
 
-.featured-book {
-  background: linear-gradient(135deg, rgb(30, 30, 46), rgb(50, 50, 80));
-  padding: 25px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  height: 100%;
-}
-
-.featured-book:hover {
-  transform: translateY(-5px);
-  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+#results {
+  margin: 50px 0 0 0;
 }
 
 .featured-img {

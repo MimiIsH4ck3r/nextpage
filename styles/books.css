@@ -1,0 +1,79 @@
+.book-img img {
+  width: 250px;
+  border-radius: 10px;
+}
+
+.book-title {
+  font-size: 3rem;
+}
+
+.author {
+  margin-bottom: 10px;
+}
+
+.author::after {
+  content: "";
+  display: block;
+  width: 200px;
+  height: 3px;
+  background: rgb(167, 139, 250);
+  margin: 5px 0 20px;
+  border-radius: 10px;
+}
+
+.price {
+  font-size: 24px;
+  color: greenyellow;
+  margin: 10px 0;
+}
+
+.description {
+  margin: 20px 0;
+}
+
+.description::after {
+  content: "";
+  display: block;
+  width: 200px;
+  height: 3px;
+  background: rgb(167, 139, 250);
+  margin: 5px 0 20px;
+  border-radius: 10px;
+}
+
+.more-details {
+  visibility: inherit;
+}
+/* Coming-soon */
+#Coming-soon-title {
+  height: 56vh;
+}
+/* book001 reviews */
+#book001 .heading {
+  transition: all 0.3s ease;
+}
+
+#book001 .heading:hover {
+  transform: translateY(-2px);
+  color: rgb(167, 139, 250);
+}
+
+#book001 .review-card {
+  background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  color: rgb(229, 231, 235);
+  transition: all 0.3s ease;
+}
+
+#book001 .review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
+}
+#book001 .review-card i {
+  color: gold;
+}
+#book001 .review-btn {
+  margin: 20px 0 0 0;
+}
