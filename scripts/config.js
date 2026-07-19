@@ -12,7 +12,7 @@ window.signIn = () => {};
 if (localStorage.getItem("currentUser")) {
   document.getElementById("profile-container").innerHTML += /*html*/ `
     <div tabindex="0" class="profile">
-      <img src="./assets/default-profile-picture.jpg" alt="Profile picture">
+      <img class="profile-img" src="./assets/default-profile-picture.jpg" alt="Profile picture">
       <nav class="popup">
         <button class="profile-button" onclick=""> 
           <i class=""></i>

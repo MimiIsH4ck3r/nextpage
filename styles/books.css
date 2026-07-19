@@ -1,6 +1,7 @@
 .book-img img {
   width: 250px;
   border-radius: 10px;
+  margin: 20px 0;
 }
 
 .book-title {
@@ -11,7 +12,16 @@
   margin-bottom: 10px;
 }
 
-.author::after {
+.price {
+  font-size: 24px;
+  color: greenyellow;
+  margin: 10px 0;
+}
+.main-detail {
+  margin: 20px 0;
+}
+
+.main-detail::after {
   content: "";
   display: block;
   width: 200px;
@@ -19,12 +29,6 @@
   background: rgb(167, 139, 250);
   margin: 5px 0 20px;
   border-radius: 10px;
-}
-
-.price {
-  font-size: 24px;
-  color: greenyellow;
-  margin: 10px 0;
 }
 
 .description {
@@ -42,23 +46,33 @@
 }
 
 .more-details {
-  visibility: inherit;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  margin: 20px 0;
 }
+
+/* Phone */
+@media (max-width: 406px) {
+  .more-details {
+    margin: 20px 0;
+  }
+}
+
 /* Coming-soon */
 #Coming-soon-title {
   height: 56vh;
 }
 /* book001 reviews */
-#book001 .heading {
+.heading {
   transition: all 0.3s ease;
 }
 
-#book001 .heading:hover {
+.heading:hover {
   transform: translateY(-2px);
   color: rgb(167, 139, 250);
 }
 
-#book001 .review-card {
+.review-card {
   background: linear-gradient(135deg, rgb(30, 30, 50), rgb(14, 14, 30));
   padding: 15px;
   margin: 20px 0;
@@ -67,13 +81,13 @@
   transition: all 0.3s ease;
 }
 
-#book001 .review-card:hover {
+.review-card:hover {
   transform: translateY(-5px);
   box-shadow: 5px 7px 25px rgba(167, 139, 250, 0.5);
 }
-#book001 .review-card i {
+.star-rating i {
   color: gold;
 }
-#book001 .review-btn {
+.review-btn {
   margin: 20px 0 0 0;
 }

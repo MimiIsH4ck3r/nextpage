@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="./styles/main.css" />
     <link rel="stylesheet" href="./styles/books.css" />
   </head>
-  <body id="book001" class="page-transition">
+  <body class="page-transition">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top sec-bg">
       <a class="navbar-brand txt-color" href="./index.html">
@@ -67,36 +67,13 @@
         </ul>
       </div>
     </nav>
-    <section id="bookDetail" class="container">
-      <div class="row detail-div"></div>
-    </section>
+    <section id="bookDetail" class="container"></section>
 
     <!-- REVIEWS -->
     <section class="sec-bg">
       <div class="container">
         <h2 class="sect-heading txt-color">Reviews</h2>
-
-        <div class="review-card">
-          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
-          ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
-          ><i class="fa-solid fa-star"></i>
-          <p class="txt-sec-color">
-            "Amazing world-building! I couldn't stop reading."
-          </p>
-          <span>- Mimi</span>
-        </div>
-
-        <div class="review-card">
-          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
-          ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
-          ><i class="fa-solid fa-star"></i>
-          <p class="txt-sec-color">
-            "I love this book! I admire the whole series so much! Rick is like
-            male JKR, he has the most amazing imagination and it's written at
-            such a solid pace."
-          </p>
-          <span>- Alex</span>
-        </div>
+        <div id="reviewContainer"></div>
       </div>
     </section>
     <section id="Write">
@@ -106,43 +83,7 @@
           Share what you think about this book.
         </p>
       </div>
-      <div class="form container">
-        <form action="">
-          <div class="row">
-            <div class="col-md-3">
-              <label class="txt-color" for="">Name</label>
-              <input type="text" name="name" class="form-control" />
-              <label class="txt-color" for="">Email</label>
-              <input type="text" name="email" class="form-control" />
-            </div>
-            <div class="col-md-3">
-              <label class="txt-color" for="">Rating</label>
-              <div class="star-rating">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-              </div>
-              <label class="txt-color" for="">Choose picture</label>
-              <input type="file" name="picture" />
-            </div>
-            <div class="col-md-6">
-              <label class="txt-color" for="">Your review</label>
-              <textarea class="form-control" rows="4"> </textarea>
-            </div>
-          </div>
-          <div class="text-end">
-            <button
-              type="button"
-              class="review-btn btn btn-outline-light"
-              onclick="alert('Review submitted! 🎉')"
-            >
-              Share
-            </button>
-          </div>
-        </form>
-      </div>
+      <div class="form container"></div>
     </section>
     <script type="module" src="./scripts/config.js"></script>
     <script type="module" src="./scripts/books.js"></script>
@@ -163,9 +104,8 @@
           <h5 class="txt-color">Quick links</h5>
           <ul class="footer-links">
             <li><a href="./index.html">Home</a></li>
-            <li><a href="./Recommendations.html">Recommendations</a></li>
-            <li><a href="./Reviews.html">Reviews</a></li>
-            <li><a href="./Games-quizzes.html">Games & Quizzes</a></li>
+            <li><a href="./recommendations.html">Recommendations</a></li>
+            <li><a href="./reviews.html">Reviews</a></li>
           </ul>
         </div>
         <div class="col-md-4">

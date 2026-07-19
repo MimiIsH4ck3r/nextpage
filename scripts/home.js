@@ -84,7 +84,7 @@ function buildCarousel(section, books) {
       </div>`;
 }
 
-async function loadBooks() {
+async function loadRcmBooks() {
   const editorsPicks = [
     "Harry Potter and the Philosopher's Stone",
     "Percy Jackson: The Lightning Thief",
@@ -124,4 +124,4 @@ async function loadBooks() {
   }
   document.getElementById("rcm-sections").innerHTML = html;
 }
-loadBooks();
+loadRcmBooks();
