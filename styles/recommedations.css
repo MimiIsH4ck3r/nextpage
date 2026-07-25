@@ -30,3 +30,22 @@
     text-align: center;
   }
 }
+
+#pagination {
+  margin: 20px;
+}
+
+.page-link {
+  background: none;
+  border-radius: 0;
+}
+
+.active > .page-link,
+.page-link.active {
+  background-color: rgb(167, 139, 250);
+  border-color: rgb(167, 139, 250);
+}
+
+.page-link:hover {
+  color: rgb(27, 27, 70);
+}

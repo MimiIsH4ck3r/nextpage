@@ -103,40 +103,13 @@
     <section id="Recommendations" class="sec-bg">
       <h3 class="sect-heading txt-color">Recommendations</h3>
       <p class="text-center txt-sec-color">Books you might like</p>
-      <!-- <div
-        id="carouselRecommendations"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div class="carousel-inner"></div>
-        <div>
-          <a
-            href="./recommendations.html"
-            class="rcm-link text-decoration-none"
-          >
-            <h3 class="txt-color">
-              Start exploring now!<i class="fa-solid fa-angle-right"></i>
-            </h3>
-          </a>
+      <!-- Loading -->
+      <div id="data-container">
+        <div id="api-spinner" class="book-spinner">
+          <div class="book-page"></div>
         </div>
-
-        <a
-          class="carousel-control-prev"
-          href="#carouselRecommendations"
-          role="button"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        </a>
-        <a
-          class="carousel-control-next"
-          href="#carouselRecommendations"
-          role="button"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        </a>
-      </div> -->
+        <div id="output-content"></div>
+      </div>
       <div id="rcm-sections"></div>
       <div>
         <a href="./recommendations.html" class="rcm-link text-decoration-none">
@@ -152,34 +125,9 @@
         <h3 class="sect-heading txt-color">Book reviews</h3>
         <p class="text-center txt-sec-color">Review your favourite book</p>
 
-        <div class="row g-4">
-          <!-- Review 1 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="card-light">
-              <img src="./assets/book001.jpg" class="review-book" />
-
-              <h3 class="txt-color">Heroes of Olympus:<br />The Lost Hero</h3>
-
-              <div class="stars">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-              </div>
-
-              <p class="txt-sec-color review-text">
-                "I love this book! I admire the whole series so much! Rick is
-                like male JKR, he has the most amazing imagination and it's
-                written at such a solid pace."
-              </p>
-
-              <p class="review-user">— Alex</p>
-            </div>
-          </div>
-
+        <div id="reviewContainer">
           <!-- Review 2 -->
-          <div class="col-lg-4 col-md-6 d-none d-md-block">
+          <!-- <div class="col-lg-4 col-md-6 d-none d-md-block">
             <div class="card-light">
               <img src="./assets/book002.jpg" alt="book1" class="review-book" />
 
@@ -227,21 +175,19 @@
 
               <p class="review-user">— Mia</p>
             </div>
-          </div>
+          </div> -->
 
           <!-- Review now -->
-          <div>
-            <a
-              href="./recommendations.html"
-              class="review-link text-decoration-none"
-            >
-              <h3 class="txt-color">
-                Find out how others think!<i
-                  class="fa-solid fa-angle-right"
-                ></i>
-              </h3>
-            </a>
-          </div>
+        </div>
+        <div>
+          <a
+            href="./recommendations.html"
+            class="review-link text-decoration-none"
+          >
+            <h3 class="txt-color">
+              Find out how others think!<i class="fa-solid fa-angle-right"></i>
+            </h3>
+          </a>
         </div>
       </div>
     </section>

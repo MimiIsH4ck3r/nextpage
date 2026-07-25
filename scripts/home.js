@@ -1,20 +1,30 @@
 import { API_KEY } from "./config.js";
+import { ratingStars } from "./config.js";
+import { shortenDescription } from "./config.js";
 
 async function fetchBooks(section) {
-  if (Array.isArray(section.query)) {
-    const allResponses = await Promise.all(
-      section.query.map(async (book) => {
-        const response = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(book)}&key=${API_KEY}`,
-        );
-        const data = await response.json();
-        return data;
-      }),
-    );
-    const individualBooks = allResponses.map((response) => response.items[0]);
-    const editorsList = { items: individualBooks };
-    console.log(editorsList);
-    return editorsList;
+  if (Array.isArray(section.query)) // Check if it's editor's list
+  {
+    try {
+      const allResponses = await Promise.all(
+        section.query.map(async (book) => {
+          const response = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(book)}&key=${API_KEY}`,
+          );
+          const data = await response.json();
+          return data;
+        }),
+      );
+      const individualBooks = allResponses.map(
+        (response) => response.items?.[0],
+      );
+      const editorsList = { items: individualBooks };
+      console.log(editorsList);
+      return editorsList;
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+    }
   } else {
     const response = await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(section.query)}${section.orderBy ? `&orderBy=${section.orderBy}` : ""}&maxResults=20&key=${API_KEY}`,
@@ -119,9 +129,56 @@ async function loadRcmBooks() {
   let html = "";
   for (const section of homeRecommendations) {
     const books = await fetchBooks(section);
+    books.items = books.items.filter((item) => item.volumeInfo?.imageLinks);
     html += buildCarousel(section, books);
-    console.log(html);
   }
   document.getElementById("rcm-sections").innerHTML = html;
 }
-loadRcmBooks();
+
+// Load home Reviews
+const reviewKeys = Object.keys(localStorage).filter((key) =>
+  key.startsWith("reviews-"),
+);
+const reviewKeysId = reviewKeys.map((key) => key.split("-")[1]);
+
+function loadHomeReviews() {
+  const storageKeys = Object.keys(localStorage);
+  const reviewKeys = storageKeys.filter((key) => key.startsWith("reviews-"));
+
+  const allReviews = reviewKeys.map((key) => {
+    const reviews = JSON.parse(localStorage.getItem(key) || "[]");
+    return { reviews };
+  });
+
+  const homeReviewsContainer = document.querySelector("#reviewContainer");
+  if (!homeReviewsContainer) return;
+
+  let homeReviews = `<div class="row g-4">
+  ${allReviews
+    .map((item, index) => {
+      const review = item.reviews[0]; // Get the first review left for this book
+      if (!review) return "";
+
+      return `<div class="col-lg-4 col-md-6 ${index === 0 ? "" : index === 1 ? "d-none d-sm-block" : "d-none d-md-block"}">
+      <div class="card-light">
+        <img src="${
+          // Pulled instantly from local cache instead of Google servers!
+          review.bookThumbnail ?? "https://placehold.co/128x190?text=No+Image"
+        }" 
+          alt="${review.bookTitle ?? "Book Cover"}" class="review-book" />
+        <h3 class="txt-color">${review.bookTitle ?? "Untitled Book"}</h3>
+        <div class="stars">
+          ${ratingStars(review.rating)}
+        </div>
+        <p class="txt-sec-color review-text">${review.review}</p>
+        <p class="review-user">— ${review.user.username}</p>
+      </div>
+    </div>`;
+    })
+    .join("\n")}
+  </div>`;
+
+  homeReviewsContainer.innerHTML = homeReviews;
+}
+console.log(localStorage);
+loadHomeReviews();

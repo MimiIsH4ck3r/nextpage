@@ -87,6 +87,37 @@
                 class="search-bar form-control"
                 placeholder="Search a book..."
               />
+              <button
+                class="btn btn-outline-light dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                data-default-text="Search by..."
+              >
+                Search by...
+              </button>
+              <ul
+                class="dropdown-menu sb-dropdown-menu"
+                style="max-height: 200px"
+              >
+                <li>
+                  <button type="submit" class="btn w-100" value="title">
+                    Title
+                  </button>
+                </li>
+                <li>
+                  <button type="submit" class="btn w-100">Author</button>
+                </li>
+                <li>
+                  <button type="submit" class="btn w-100">ISBN</button>
+                </li>
+                <li>
+                  <button type="submit" class="btn w-100">Publisher</button>
+                </li>
+                <li>
+                  <button type="submit" class="btn w-100">Language</button>
+                </li>
+              </ul>
               <button type="submit" class="btn btn-outline-light">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
@@ -138,11 +169,35 @@
             </div>
           </form>
         </div>
+
+        <div id="data-container">
+          <div id="api-spinner" class="book-spinner">
+            <div class="book-page"></div>
+          </div>
+          <div id="output-content"></div>
+        </div>
+
         <div id="results"></div>
+
+        <nav id="pagination" aria-label="Search result pagination">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="txt-color btn btn-outline-light page-link" id="prevBtn"
+                >Previous</a
+              >
+            </li>
+            <div style="display: flex" id="paginationPages"></div>
+            <li class="page-item">
+              <a class="txt-color btn btn-outline-light page-link" id="nextBtn"
+                >Next</a
+              >
+            </li>
+          </ul>
+        </nav>
       </div>
     </section>
     <section id="Featured">
-      <h3 class="txt-color sect-heading">Top 4 best seller book of the week</h3>
+      <h3 class="txt-color sect-heading">Recent Books</h3>
       <p class="txt-sec-color text-center">Your next obsession awaits...</p>
 
       <div class="container">

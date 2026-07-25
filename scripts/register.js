@@ -1,6 +1,4 @@
-if (localStorage.getItem("currentUser")) {
-  location.href = "././index.html";
-}
+if (localStorage.getItem("currentUser")) location.href = "././index.html";
 
 let form = document.querySelector("form");
 form.addEventListener("submit", (e) => {

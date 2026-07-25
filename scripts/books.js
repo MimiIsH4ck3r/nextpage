@@ -1,18 +1,40 @@
 import { API_KEY } from "./config.js";
+import { ratingStars } from "./config.js";
 
 const searchParams = new URLSearchParams(location.search);
 const id = searchParams.get("id");
 
-async function loadDetails() {
-  if (!id) {
-    console.error("No book ID found in the URL.");
-    return;
-  }
+if (!id) {
+  console.error("No book ID provided in the URL. Cannot load book details.");
+} else {
+  document.addEventListener("DOMContentLoaded", () => {
+    const rawHistory = localStorage.getItem("history");
 
+    // 3. Clean fallback handling: parse it safely, default to a blank array if empty or corrupt
+    let historyArray = [];
+    if (rawHistory && rawHistory !== "undefined") {
+      historyArray = JSON.parse(rawHistory);
+    }
+
+    historyArray = historyArray.filter((existingId) => existingId !== id);
+
+    historyArray.unshift(id);
+
+    if (historyArray.length > 10) {
+      historyArray = historyArray.slice(0, 10);
+    }
+
+    localStorage.setItem("history", JSON.stringify(historyArray));
+    console.log("Successfully updated viewing history:", historyArray);
+  });
+}
+
+let data;
+async function loadDetails() {
   const response = await fetch(
     `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
   );
-  const data = await response.json();
+  data = await response.json();
   console.log(data);
 
   const detail = document.getElementById("bookDetail");
@@ -48,30 +70,19 @@ async function loadDetails() {
 
     <h4 class="txt-color">More Details</h4>
     <div class="txt-sec-color more-details">
-      <p>${data.volumeInfo.language ? "Language: " + data.volumeInfo.language : ""}</p>
-      <p>${data.volumeInfo.pageCount ? "Page Count: " + data.volumeInfo.pageCount : ""} pages</p>
-      <p>${data.volumeInfo.publisher ? "Publisher: " + data.volumeInfo.publisher : ""} </p>
-      <p>${data.volumeInfo.publishedDate ? "Published Date: " + data.volumeInfo.publishedDate : ""} </p>
-      <p>${data.volumeInfo.averageRating ? "Average Rating: " + data.volumeInfo.averageRating : ""} </p>
-      <p>${data.volumeInfo.ratingsCount ? "Ratings Count: " + data.volumeInfo.ratingsCount : ""} </p>
-      <p>${data.saleInfo.saleability ? "Saleability: " + data.saleInfo.saleability.replaceAll("_", " ").toLowerCase() : ""} </p>
-      <p>${data.volumeInfo.isEbook ? "Available on ebook" : "Not available on ebook"} </p>
-      <p>${data.saleInfo?.listPrice ? "List Price: " + data.saleInfo.listPrice.amount + data.saleInfo.listPrice.currencyCode : ""} </p>
-      <p>${data.saleInfo?.retailPrice ? "Retail Price: " + data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode : ""} </p>
+      ${data.volumeInfo.language ? `<p>Language: ${data.volumeInfo.language}</p>` : ""}
+      ${data.volumeInfo.pageCount ? `<p>Page Count: ${data.volumeInfo.pageCount}</p>` : ""}
+      ${data.volumeInfo.publisher ? `<p>Publisher: ${data.volumeInfo.publisher}</p>` : ""}
+      ${data.volumeInfo.publishedDate ? `<p>Published Date: ${data.volumeInfo.publishedDate}</p>` : ""}
+      ${data.volumeInfo.averageRating ? `<p>Average Rating: ${data.volumeInfo.averageRating}</p>` : ""}
+      ${data.volumeInfo.ratingsCount ? `<p>Ratings Count: ${data.volumeInfo.ratingsCount}</p>` : ""}
+      ${data.saleInfo.saleability ? `<p>Saleability: ${data.saleInfo.saleability.replaceAll("_", " ").toLowerCase()}</p>` : ""}
+      ${data.volumeInfo.isEbook ? "<p>Available on ebook</p>" : "<p>Not available on ebook</p>"}
+      ${data.saleInfo?.listPrice ? `<p>List Price: ${data.saleInfo.listPrice.amount + data.saleInfo.listPrice.currencyCode}</p>` : ""}
+      ${data.saleInfo?.retailPrice ? `<p>Retail Price: ${data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode}</p>` : ""}
     </div>`;
 }
 loadDetails();
-
-function ratingStars(rating) {
-  let stars = "";
-  for (let i = 0; i < (rating | 0); i++) {
-    stars += `<i class="fa-solid fa-star"></i>`;
-  }
-  if (rating % 1 != 0) {
-    stars += `<i class="fa-solid fa-star-half-stroke"></i>`;
-  }
-  return stars + " ";
-}
 
 function genreChips(genres) {
   let chips = "";
@@ -144,6 +155,8 @@ form.addEventListener("submit", (event) => {
     user: {
       username: user.username,
     },
+    bookTitle: data.volumeInfo.title,
+    bookThumbnail: data.volumeInfo.imageLinks?.thumbnail,
   });
 
   localStorage.setItem(`reviews-${id}`, JSON.stringify(existingReviews));
@@ -155,10 +168,11 @@ function loadReviews() {
   let review = "";
 
   const reviews = JSON.parse(localStorage.getItem(`reviews-${id}`) || "[]");
-  console.log(reviews);
 
-  for (let i = 0; i < reviews.length; i++) {
-    review += `
+  if (reviews.length > 0) {
+    // console.log("Yes");
+    for (let i = 0; i < reviews.length; i++) {
+      review += `
         <div class="review-card">
           <div style="margin: 5px 0;">
             <img class="profile-img" src="./assets/default-profile-picture.jpg" /> ${reviews[i].user.username}
@@ -169,8 +183,13 @@ function loadReviews() {
           <p class="txt-sec-color">${reviews[i].review}</p>
         </div>
       `;
+    }
+    document.querySelector("#reviewContainer").innerHTML = review;
+  } else {
+    document.querySelector("#reviewContainer").innerHTML = `
+    <p class="txt-sec-color">No reviews yet. Be the first!</p>
+  `;
   }
-  document.querySelector("#reviewContainer").innerHTML = review;
 }
 
 loadReviews();

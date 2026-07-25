@@ -1,5 +1,24 @@
 export const API_KEY = "AIzaSyBFp9esiRmoHXSH0sZ9gDfE9j3EeWQKKK4";
 
+export function ratingStars(rating) {
+  let stars = "";
+  for (let i = 0; i < (rating | 0); i++) {
+    stars += `<i class="fa-solid fa-star"></i>`;
+  }
+  if (rating % 1 != 0) {
+    stars += `<i class="fa-solid fa-star-half-stroke"></i>`;
+  }
+  return stars + " ";
+}
+
+export function shortenDescription(des, length) {
+  if (des && des.length > length) {
+    let newDes =
+      des.slice(0, length) + `... (click "View details" to see more)`;
+    return newDes;
+  }
+  return des || "No description available.";
+}
 window.handleSignOut = () => {
   localStorage.removeItem("currentUser");
   // localStorage.removeItem("cart");
