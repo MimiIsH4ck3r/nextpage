@@ -1,32 +1,43 @@
 import { API_KEY } from "./config.js";
 import { ratingStars } from "./config.js";
+import { genresList } from "./config.js";
 
 const searchParams = new URLSearchParams(location.search);
 const id = searchParams.get("id");
 
-if (!id) {
-  console.error("No book ID provided in the URL. Cannot load book details.");
-} else {
-  document.addEventListener("DOMContentLoaded", () => {
-    const rawHistory = localStorage.getItem("history");
+document.addEventListener("DOMContentLoaded", async () => {
+  await updateHistory();
+});
 
-    // 3. Clean fallback handling: parse it safely, default to a blank array if empty or corrupt
-    let historyArray = [];
-    if (rawHistory && rawHistory !== "undefined") {
-      historyArray = JSON.parse(rawHistory);
-    }
+async function updateHistory() {
+  if (!id) return;
 
-    historyArray = historyArray.filter((existingId) => existingId !== id);
+  let historyArray = JSON.parse(localStorage.getItem("history") || "[]");
+  historyArray = historyArray.filter((existingId) => existingId.id !== id);
 
-    historyArray.unshift(id);
+  await loadDetails();
 
-    if (historyArray.length > 10) {
-      historyArray = historyArray.slice(0, 10);
-    }
-
-    localStorage.setItem("history", JSON.stringify(historyArray));
-    console.log("Successfully updated viewing history:", historyArray);
+  const timestamp = new Date().toLocaleString("sv-SE", {
+    timeZone: "Asia/Ho_Chi_Minh",
   });
+  historyArray.unshift({
+    id: id,
+    bookTitle: data.volumeInfo.title,
+    bookThumbnail:
+      data.volumeInfo.imageLinks?.thumbnail ??
+      "https://placehold.co/128x190?text=No+Image",
+    bookCategories: data.volumeInfo.categories ?? [],
+    bookAuthors: data.volumeInfo.authors ?? [],
+    bookDescription: data.volumeInfo.description ?? "No description availible",
+    timestamp: timestamp,
+  });
+
+  if (historyArray.length > 10) {
+    historyArray = historyArray.slice(0, 10);
+  }
+
+  localStorage.setItem("history", JSON.stringify(historyArray));
+  console.log("Successfully updated viewing history:", historyArray);
 }
 
 let data;
@@ -39,27 +50,29 @@ async function loadDetails() {
 
   const detail = document.getElementById("bookDetail");
   detail.innerHTML = `
-    <div class="row main-detail">
-      <div class="col-md-3 book-img">
-        <img src="${
-          data.volumeInfo.imageLinks?.thumbnail ??
-          "https://placehold.co/128x190?text=No+Image"
-        }" alt="${data.volumeInfo.title} Cover" />
-      </div>
+    <div class="main-detail">
+      <div class="container">
+        <div class="book-img">
+          <img src="${
+            data.volumeInfo.imageLinks?.thumbnail ??
+            "https://placehold.co/128x190?text=No+Image"
+          }" alt="${data.volumeInfo.title} Cover" />
+        </div>
 
-      <div class="col-md-9">
-        <h1 class="book-title txt-color heading">
-          ${data.volumeInfo.title}
-        </h1>
-        <p class="txt-sec-color">${data.volumeInfo.averageRating ? ratingStars(data.volumeInfo.averageRating) + data.volumeInfo.averageRating : "No rating yet"}</p>
-        <p class="author txt-sec-color">by ${
-          data.volumeInfo.authors
-            ? data.volumeInfo.authors.join(", ")
-            : "No author"
-        }</p>
-        <p class="txt-sec-color">${data.volumeInfo.categories ? genreChips(data.volumeInfo.categories) : ""} </p>
-        <p class="price">${data.saleInfo?.retailPrice?.amount ? data.saleInfo?.saleability.replaceAll("_", " ") + ": " + data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode : data.saleInfo?.saleability.replaceAll("_", " ")}</p>
-        <p>${data.saleInfo?.buyLink ? `<p><button class="btn btn-outline-light" href="${data.saleInfo.buyLink}">Buy Link here</button></p>` : ""}</p>
+        <div>
+          <h1 class="book-title txt-color heading">
+            ${data.volumeInfo.title}
+          </h1>
+          <p class="txt-sec-color star-rating">${data.volumeInfo.averageRating ? ratingStars(data.volumeInfo.averageRating) + data.volumeInfo.averageRating : "No rating yet"}</p>
+          <p class="author txt-sec-color">by ${
+            data.volumeInfo.authors
+              ? data.volumeInfo.authors.join(", ")
+              : "No author"
+          }</p>
+          <p class="txt-sec-color genre-chips">${data.volumeInfo.categories ? genreChips(data.volumeInfo.categories) : ""} </p>
+          <p class="price">${data.saleInfo?.retailPrice?.amount ? data.saleInfo?.saleability.replaceAll("_", " ") + ": " + data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode : data.saleInfo?.saleability.replaceAll("_", " ")}</p>
+          <p>${data.saleInfo?.buyLink ? `<p><button class="btn btn-outline-light" href="${data.saleInfo.buyLink}">Buy Link here</button></p>` : ""}</p>
+        </div>
       </div>
     </div>
 
@@ -138,7 +151,7 @@ stars.forEach((star) => {
 });
 
 const form = document.querySelector("form");
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const review = event.target.review.value.trim();
@@ -148,6 +161,8 @@ form.addEventListener("submit", (event) => {
   const existingReviews = JSON.parse(
     localStorage.getItem(`reviews-${id}`) || "[]",
   );
+
+  await loadDetails();
 
   existingReviews.push({
     review,

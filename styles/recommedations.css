@@ -49,3 +49,15 @@
 .page-link:hover {
   color: rgb(27, 27, 70);
 }
+
+.page-link-number {
+  background: none;
+  border-radius: 0;
+  cursor: auto;
+}
+
+@media (max-width: 427) {
+  .page-link-number {
+    display: none;
+  }
+}

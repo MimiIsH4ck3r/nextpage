@@ -4,6 +4,10 @@
   margin: 20px 0;
 }
 
+.genre-chips i {
+  color: rgb(167, 139, 250);
+}
+
 .book-title {
   font-size: 3rem;
 }
@@ -19,6 +23,20 @@
 }
 .main-detail {
   margin: 20px 0;
+}
+
+.main-detail .container {
+  display: flex;
+  gap: 30px;
+}
+
+@media (max-width: 540px) {
+  .main-detail .container {
+    flex-direction: column;
+  }
+  .book-title {
+    font-size: 2rem;
+  }
 }
 
 .main-detail::after {
@@ -48,6 +66,7 @@
 .more-details {
   display: grid;
   grid-template-columns: 50% 50%;
+  gap: 20px;
   margin: 20px 0;
 }
 

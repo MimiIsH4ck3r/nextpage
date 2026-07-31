@@ -1,6 +1,6 @@
 import { API_KEY } from "./config.js";
 import { ratingStars } from "./config.js";
-import { shortenDescription } from "./config.js";
+import { shortenText } from "./config.js";
 
 async function fetchBooks(section) {
   if (Array.isArray(section.query)) // Check if it's editor's list
@@ -109,12 +109,6 @@ async function loadRcmBooks() {
 
   const homeRecommendations = [
     {
-      id: "newReleases",
-      title: "New Releases",
-      query: "subject:general",
-      orderBy: "newest",
-    },
-    {
       id: "editorsPick",
       title: "Editor's Pick",
       query: editorsPicks,
@@ -156,13 +150,12 @@ function loadHomeReviews() {
   let homeReviews = `<div class="row g-4">
   ${allReviews
     .map((item, index) => {
-      const review = item.reviews[0]; // Get the first review left for this book
+      const review = item.reviews[0];
       if (!review) return "";
-
+      if (index >= 3) return "";
       return `<div class="col-lg-4 col-md-6 ${index === 0 ? "" : index === 1 ? "d-none d-sm-block" : "d-none d-md-block"}">
       <div class="card-light">
         <img src="${
-          // Pulled instantly from local cache instead of Google servers!
           review.bookThumbnail ?? "https://placehold.co/128x190?text=No+Image"
         }" 
           alt="${review.bookTitle ?? "Book Cover"}" class="review-book" />
@@ -170,7 +163,7 @@ function loadHomeReviews() {
         <div class="stars">
           ${ratingStars(review.rating)}
         </div>
-        <p class="txt-sec-color review-text">${review.review}</p>
+        <p class="txt-sec-color review-text">${shortenText(review.review, 170)}</p>
         <p class="review-user">— ${review.user.username}</p>
       </div>
     </div>`;

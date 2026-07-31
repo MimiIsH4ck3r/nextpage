@@ -11,14 +11,46 @@ export function ratingStars(rating) {
   return stars + " ";
 }
 
-export function shortenDescription(des, length) {
-  if (des && des.length > length) {
-    let newDes =
-      des.slice(0, length) + `... (click "View details" to see more)`;
-    return newDes;
+export function shortenText(text, length) {
+  if (text && text.length > length) {
+    let newText = text.slice(0, length) + `... `;
+    return newText;
   }
-  return des || "No description available.";
+  return text || "No description available.";
 }
+
+export const genresList = [
+  "Adult",
+  "Adventure",
+  "Biography",
+  "Childrens",
+  "Christian",
+  "Classics",
+  "Comics",
+  "Contemporary",
+  "Crime",
+  "Dystopia",
+  "Entrepreneurship",
+  "Education",
+  "Fiction",
+  "Fantasy",
+  "Historical",
+  "Horror",
+  "Humor",
+  "Mystery",
+  "Magic",
+  "Nonfiction",
+  "Paranormal",
+  "Poetry",
+  "Psychology",
+  "Religion",
+  "Romance",
+  "Science Fiction",
+  "Self Help",
+  "Thriller",
+  "Young Adult",
+];
+
 window.handleSignOut = () => {
   localStorage.removeItem("currentUser");
   // localStorage.removeItem("cart");
