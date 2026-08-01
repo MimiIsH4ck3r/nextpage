@@ -15,6 +15,10 @@
   font-size: 0.9rem;
 }
 
+#searchContainer {
+  width: 100%;
+  margin: 20px 0;
+}
 .search-bar {
   background-color: rgb(87, 87, 137);
 }
@@ -28,27 +32,4 @@
 }
 .form label {
   margin: 15px 0 5px 0;
-}
-
-#Write .star-rating {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
-  margin: 0 0 10px 0;
-}
-
-#Write .star-rating i {
-  font-size: 24px;
-  color: gray;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#Write .star-rating i:hover,
-#Write .star-rating i:hover ~ i {
-  color: gold;
-}
-
-textarea {
-  resize: none;
 }

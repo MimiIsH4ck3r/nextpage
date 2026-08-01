@@ -81,15 +81,29 @@
           Look at a book from someone else's point of view
         </p>
       </div>
-      <div class="container text-center">
-        <input
-          type="text"
-          class="search-bar form-control"
-          placeholder="Search a book..."
-        />
+      <div id="searchContainer" class="container text-center">
+        <form class="d-flex justify-content-center">
+          <div class="input-group">
+            <input
+              name="q"
+              id="q"
+              type="text"
+              class="search-bar form-control"
+              placeholder="Search a book..."
+            /><button type="submit" class="btn btn-outline-light">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </form>
       </div>
-      <div id="Book-reviews" class="container">
-        <div class="row g-4">
+      <div id="loading" class="text-center">
+        <div id="api-spinner" class="book-spinner">
+          <div class="book-page"></div>
+        </div>
+        <div id="output-content"></div>
+      </div>
+      <div id="bookReviews" class="container">
+        <!-- <div class="row g-4">
           <div class="col-md-6">
             <div class="card-dark">
               <div class="d-flex align-items-center mb-3">
@@ -151,7 +165,7 @@
               </a>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 d-sm-block d-none">
             <div class="card-dark">
               <div class="d-flex align-items-center">
                 <img src="./assets/book004.jpg" class="review-book me-3" />
@@ -181,7 +195,7 @@
               </a>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 d-sm-block d-none">
             <div class="card-dark">
               <div class="d-flex align-items-center">
                 <img src="./assets/book005.jpg" class="review-book me-3" />
@@ -209,10 +223,11 @@
               </a>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
     <script type="module" src="./scripts/config.js"></script>
+    <script type="module" src="./scripts/reviews.js"></script>
   </body>
   <footer class="footer">
     <div class="container">

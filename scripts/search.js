@@ -13,6 +13,8 @@ const query = searchParams.get("q")?.trim();
 const genres = searchParams.getAll("genres");
 const excludeGenres = searchParams.getAll("exclude-genres");
 
+const spinner = document.getElementById("api-spinner");
+
 function loadFilterList() {
   const genresMenu = document.querySelector(".g-dropdown-menu");
   const exGenresMenu = document.querySelector(".ex-g-dropdown-menu");
@@ -135,8 +137,6 @@ ${
     pagination.innerHTML = "";
   }
 }
-
-const spinner = document.getElementById("api-spinner");
 
 async function searchBooks() {
   if (!query && genres.length === 0 && excludeGenres.length === 0) return;

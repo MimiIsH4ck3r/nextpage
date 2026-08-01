@@ -2,9 +2,12 @@ import { API_KEY } from "./config.js";
 import { ratingStars } from "./config.js";
 import { shortenText } from "./config.js";
 
+const spinner = document.getElementById("api-spinner");
+
 async function fetchBooks(section) {
   if (Array.isArray(section.query)) // Check if it's editor's list
   {
+    spinner.style.display = "block";
     try {
       const allResponses = await Promise.all(
         section.query.map(async (book) => {
@@ -24,6 +27,7 @@ async function fetchBooks(section) {
     } catch (error) {
       console.error("Error:", error);
     } finally {
+      spinner.style.display = "none";
     }
   } else {
     const response = await fetch(
@@ -175,3 +179,4 @@ function loadHomeReviews() {
 }
 console.log(localStorage);
 loadHomeReviews();
+loadRcmBooks();

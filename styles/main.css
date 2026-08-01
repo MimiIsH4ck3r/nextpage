@@ -258,22 +258,23 @@ footer {
 /* Loading */
 .book-spinner {
   display: none;
-  width: 30px;
-  height: 40px;
-  border: 3px solid #333;
+  width: 70px;
+  height: 55px;
   position: relative;
   margin: 20px auto;
-  background-color: #cf2fff;
+  border: rgb(167, 139, 250) solid 5px;
+  border-radius: 5px;
+  background-color: #ffffff;
   perspective: 150px;
 }
 
 .book-page {
   width: 30px;
-  height: 100%;
-  background-color: #3498db;
+  height: 45px;
+  background-color: #eff1f2;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0px;
+  left: 30px;
   /* Crucial: Flips from the left spine, not the center */
   transform-origin: left center;
   animation: flip-book 1.2s ease-in-out infinite;
@@ -283,14 +284,11 @@ footer {
 @keyframes flip-book {
   0% {
     transform: rotateY(0deg);
-    background-color: #6831ff;
   }
   50% {
-    background-color: #3c07b6;
-    width: 90%;
+    background-color: #d1d5d9;
   }
   100% {
     transform: rotateY(-180deg);
-    background-color: #6831ff;
   }
 }

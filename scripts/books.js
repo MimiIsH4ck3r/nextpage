@@ -13,7 +13,7 @@ async function updateHistory() {
   if (!id) return;
 
   let historyArray = JSON.parse(localStorage.getItem("history") || "[]");
-  historyArray = historyArray.filter((existingId) => existingId.id !== id);
+  historyArray = historyArray.filter((item) => item.id !== id);
 
   await loadDetails();
 
@@ -37,10 +37,10 @@ async function updateHistory() {
   }
 
   localStorage.setItem("history", JSON.stringify(historyArray));
-  console.log("Successfully updated viewing history:", historyArray);
+  console.log("Updated history:", historyArray);
 }
 
-let data;
+let data = null;
 async function loadDetails() {
   const response = await fetch(
     `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
@@ -71,7 +71,7 @@ async function loadDetails() {
           }</p>
           <p class="txt-sec-color genre-chips">${data.volumeInfo.categories ? genreChips(data.volumeInfo.categories) : ""} </p>
           <p class="price">${data.saleInfo?.retailPrice?.amount ? data.saleInfo?.saleability.replaceAll("_", " ") + ": " + data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode : data.saleInfo?.saleability.replaceAll("_", " ")}</p>
-          <p>${data.saleInfo?.buyLink ? `<p><button class="btn btn-outline-light" href="${data.saleInfo.buyLink}">Buy Link here</button></p>` : ""}</p>
+          <p>${data.saleInfo?.buyLink ? `<a class="btn btn-outline-light" href="${data.saleInfo.buyLink}">Buy Link here</a>` : ""}</p>
         </div>
       </div>
     </div>
@@ -95,7 +95,6 @@ async function loadDetails() {
       ${data.saleInfo?.retailPrice ? `<p>Retail Price: ${data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode}</p>` : ""}
     </div>`;
 }
-loadDetails();
 
 function genreChips(genres) {
   let chips = "";
@@ -109,7 +108,7 @@ const user = JSON.parse(localStorage.getItem("currentUser"));
 
 const formContainer = document.querySelector(".form");
 formContainer.innerHTML = `
-  <form ${!user ? `style="cursor: pointer" onclick='location.href = \"./login.html\"'` : ""}>
+  <form ${!user ? `style="cursor: pointer" onclick="window.location.href='./login.html'"` : ""}>
     <label class="txt-color" for="review">${user ? `Review this book` : `Login to review`}</label>
     <div class="star-rating">
         <i class="fa-regular fa-star" data-rating="1"></i>
@@ -118,12 +117,7 @@ formContainer.innerHTML = `
         <i class="fa-regular fa-star" data-rating="4"></i>
         <i class="fa-regular fa-star" data-rating="5"></i>
     </div>
-    <textarea 
-      id="review"
-      name="review" 
-      class="form-control"
-      rows="3"> 
-    </textarea>
+    <textarea id="review" name="review" class="form-control" rows="3" ${!user ? "disabled" : ""}></textarea>
 
     <div ${user ? "" : 'style="display: none"'} class="text-end">
       <button type="submit" class="review-btn btn btn-outline-light"
@@ -155,8 +149,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const review = event.target.review.value.trim();
-
-  event.target.review.value = "";
+  if (!review) return;
 
   const existingReviews = JSON.parse(
     localStorage.getItem(`reviews-${id}`) || "[]",
@@ -165,6 +158,7 @@ form.addEventListener("submit", async (event) => {
   await loadDetails();
 
   existingReviews.push({
+    id,
     review,
     rating,
     user: {
@@ -180,30 +174,27 @@ form.addEventListener("submit", async (event) => {
 });
 
 function loadReviews() {
-  let review = "";
-
+  const container = document.getElementById("reviewContainer");
   const reviews = JSON.parse(localStorage.getItem(`reviews-${id}`) || "[]");
 
-  if (reviews.length > 0) {
-    // console.log("Yes");
-    for (let i = 0; i < reviews.length; i++) {
-      review += `
-        <div class="review-card">
-          <div style="margin: 5px 0;">
-            <img class="profile-img" src="./assets/default-profile-picture.jpg" /> ${reviews[i].user.username}
-          </div>  
-          <div class="star-rating">
-          ${ratingStars(reviews[i].rating)}
-          </div>
-          <p class="txt-sec-color">${reviews[i].review}</p>
-        </div>
-      `;
-    }
-    document.querySelector("#reviewContainer").innerHTML = review;
+  if (reviews.length === 0) {
+    container.innerHTML = `<p class="txt-sec-color">No reviews yet. Be the first!</p>`;
   } else {
-    document.querySelector("#reviewContainer").innerHTML = `
-    <p class="txt-sec-color">No reviews yet. Be the first!</p>
-  `;
+    container.innerHTML = reviews
+      .map(
+        (item) => `
+      <div class="review-card">
+        <div style="margin: 5px 0;">
+          <img class="profile-img" src="./assets/default-profile-picture.jpg" alt="Profile" /> ${item.user.username}
+        </div>  
+        <div class="star-rating">
+          ${ratingStars(item.rating)}
+        </div>
+        <p class="txt-sec-color">${item.review}</p>
+      </div>
+    `,
+      )
+      .join("");
   }
 }
 

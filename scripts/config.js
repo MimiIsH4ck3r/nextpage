@@ -51,7 +51,7 @@ export const genresList = [
   "Young Adult",
 ];
 
-window.handleSignOut = () => {
+window.signOut = () => {
   localStorage.removeItem("currentUser");
   // localStorage.removeItem("cart");
   location.reload();
@@ -69,9 +69,9 @@ if (localStorage.getItem("currentUser")) {
           <i class=""></i>
           <span> Profile</span>
         </button> 
-        <button class="profile-button" onclick="handleSignOut()"> 
+        <button class="profile-button" onclick="signOut()"> 
+        <span> ${JSON.parse(localStorage.getItem("currentUser")).username}</span>
           <i class="fa-solid fa-right-from-bracket"></i>
-          <span> Logout</span>
         </button>
       </nav>
     </div>
