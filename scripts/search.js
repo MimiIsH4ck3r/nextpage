@@ -1,11 +1,11 @@
 import { API_KEY } from "./config.js";
 import { shortenText } from "./config.js";
 import { genresList } from "./config.js";
+import { handleError } from "./config.js";
 
 const result = document.getElementById("results");
 const pagination = document.getElementById("paginationPages");
 const filter = document.querySelector(".div-filter");
-const searchByDropdown = document.querySelector(".sb-dropdown-menu");
 
 const searchParams = new URLSearchParams(location.search);
 const query = searchParams.get("q")?.trim();
@@ -61,11 +61,6 @@ filter.addEventListener("change", (event) => {
   }
 });
 
-const searchBy = document.querySelector(".sb-dropdown-menu");
-searchBy.addEventListener("click", (event) => {
-  event.target;
-});
-
 const bookPerPage = 10;
 let startIndex = 0;
 let currentPage = 1;
@@ -115,7 +110,7 @@ ${
                     </div>
 
                     <div class="col-md-8">
-                      <h3 class="txt-color">${book.volumeInfo?.title || "Untitled"}</h3>
+                      <h3 class="txt-color">${shortenText(book.volumeInfo?.title, 100) || "Untitled"}</h3>
                       <p class="txt-sec-color">${shortenText(book.volumeInfo?.description, 150)}</p>
                       <a href="./books.html?id=${book.id}&key=${API_KEY}" class="btn btn-outline-light">
                         View Details
@@ -142,7 +137,7 @@ async function searchBooks() {
   if (!query && genres.length === 0 && excludeGenres.length === 0) return;
 
   let finalBooks = [];
-  spinner.style.display = "block";
+  spinner?.style.display = "block";
   try {
     let apiQuery = encodeURIComponent(query || "");
 
@@ -153,6 +148,29 @@ async function searchBooks() {
     const response = await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=${apiQuery}&startIndex=${startIndex}&maxResults=${bookPerPage}&key=${API_KEY}`,
     );
+
+    if (response.status === 503) {
+      result.innerHTML = `
+    <div class="text-center py-5">
+      <h3>Google Indexing Outage</h3>
+      <p>The query <strong>"${query}"</strong> triggered an internal Google routing error. This search cannot be completed.</p>
+    </div>
+  `;
+    }
+    if (response.status === 429) {
+      result.innerHTML = `
+    <div class="text-center py-5">
+      <h3>Google Indexing Outage</h3>
+      <p>The query <strong>"${query}"</strong> triggered an internal Google routing error. This search cannot be completed.</p>
+    </div>
+  `;
+      return;
+    }
+    if (!response.ok) {
+      const error = new Error("HTTP connection failed");
+      error.status = response.status;
+      throw error;
+    }
 
     const data = await response.json();
     const fetchedBooks = data?.items || [];
@@ -188,9 +206,10 @@ async function searchBooks() {
     loadBooks(filteredData);
   } catch (error) {
     console.error("Error:", error);
+    handleError(error.status || 500, error);
     finalBooks = [];
   } finally {
-    spinner.style.display = "none";
+    spinner?.style.display = "none";
   }
 }
 

@@ -1,21 +1,37 @@
 import { API_KEY } from "./config.js";
 import { ratingStars } from "./config.js";
 import { genresList } from "./config.js";
+import { shortenText } from "./config.js";
+import { handleError } from "./config.js";
+
+const title = document.querySelector("title");
 
 const searchParams = new URLSearchParams(location.search);
 const id = searchParams.get("id");
 
-document.addEventListener("DOMContentLoaded", async () => {
+const spinner = document.getElementById("api-spinner");
+const detail = document.getElementById("bookDetail");
+
+let data = null;
+const isLoaded = await loadDetails();
+
+if (isLoaded) {
   await updateHistory();
-});
+} else {
+  detail.innerHTML = `
+    <div class="text-center py-5">
+      <h4 class="txt-color mb-2">An error occurred while fetching book details.</h4>
+      <p class="txt-sec-color">Please try again later.</p>
+    </div>`;
+}
 
 async function updateHistory() {
   if (!id) return;
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) return;
 
-  let historyArray = JSON.parse(localStorage.getItem("history") || "[]");
+  let historyArray = currentUser.history || [];
   historyArray = historyArray.filter((item) => item.id !== id);
-
-  await loadDetails();
 
   const timestamp = new Date().toLocaleString("sv-SE", {
     timeZone: "Asia/Ho_Chi_Minh",
@@ -28,27 +44,68 @@ async function updateHistory() {
       "https://placehold.co/128x190?text=No+Image",
     bookCategories: data.volumeInfo.categories ?? [],
     bookAuthors: data.volumeInfo.authors ?? [],
-    bookDescription: data.volumeInfo.description ?? "No description availible",
     timestamp: timestamp,
   });
 
   if (historyArray.length > 10) {
     historyArray = historyArray.slice(0, 10);
+    console.log("History array exceeded 10 items. Oldest item removed.");
   }
 
-  localStorage.setItem("history", JSON.stringify(historyArray));
+  currentUser.history = historyArray;
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const userIndex = users.findIndex((u) => u.username === currentUser.username);
+  if (userIndex !== -1) {
+    users[userIndex] = currentUser;
+    localStorage.setItem("users", JSON.stringify(users));
+  }
   console.log("Updated history:", historyArray);
 }
 
-let data = null;
 async function loadDetails() {
-  const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
-  );
-  data = await response.json();
-  console.log(data);
+  try {
+    spinner?.style.display = "block";
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
+    );
+    loadReviews();
+    if (response.status === 503) {
+      document.getElementById("bookDetail").innerHTML = `
+    <div class="ui-error-panel">
+      <h3>Google Indexing Outage</h3>
+      <p>The ID <strong>"${id}"</strong> triggered an internal Google routing error. This book cannot be parsed.</p>
+      <button onclick="location.reload()">Retry Query</button>
+    </div>
+  `;
+      return false;
+    }
+    if (response.status === 429) {
+      const error = new Error("Rate limit exceeded");
+      return false;
+    }
+    if (!response.ok) {
+      const error = new Error("HTTP connection failed");
+      error.status = response.status;
+      throw error;
+    }
 
-  const detail = document.getElementById("bookDetail");
+    data = (await response.json()) || {};
+    console.log(data);
+  } catch (error) {
+    console.error("Error:", error);
+    handleError(error.status || 500, error);
+    return false;
+  } finally {
+    spinner?.style.display = "none";
+  }
+
+  if (!data || !data.volumeInfo) {
+    document.getElementById("bookDetail").innerHTML =
+      `<h2 class="txt-color">Book details not available.</h2>`;
+    return false;
+  }
+  title.textContent = `${data.volumeInfo?.title || "Book Details"} | NextPage`;
   detail.innerHTML = `
     <div class="main-detail">
       <div class="container">
@@ -94,6 +151,7 @@ async function loadDetails() {
       ${data.saleInfo?.listPrice ? `<p>List Price: ${data.saleInfo.listPrice.amount + data.saleInfo.listPrice.currencyCode}</p>` : ""}
       ${data.saleInfo?.retailPrice ? `<p>Retail Price: ${data.saleInfo.retailPrice.amount + data.saleInfo.retailPrice.currencyCode}</p>` : ""}
     </div>`;
+  return true;
 }
 
 function genreChips(genres) {
@@ -109,15 +167,18 @@ const user = JSON.parse(localStorage.getItem("currentUser"));
 const formContainer = document.querySelector(".form");
 formContainer.innerHTML = `
   <form ${!user ? `style="cursor: pointer" onclick="window.location.href='./login.html'"` : ""}>
-    <label class="txt-color" for="review">${user ? `Review this book` : `Login to review`}</label>
-    <div class="star-rating">
+    <label class="txt-color" for="review">${user ? `Review this book` : ``}</label>
+    <div class="star-rating">${
+      user
+        ? `
         <i class="fa-regular fa-star" data-rating="1"></i>
         <i class="fa-regular fa-star" data-rating="2"></i>
         <i class="fa-regular fa-star" data-rating="3"></i>
         <i class="fa-regular fa-star" data-rating="4"></i>
-        <i class="fa-regular fa-star" data-rating="5"></i>
-    </div>
-    <textarea id="review" name="review" class="form-control" rows="3" ${!user ? "disabled" : ""}></textarea>
+        <i class="fa-regular fa-star" data-rating="5"></i>`
+        : ``
+    }</div>
+    ${user ? `<textarea id="review" name="review" class="form-control" rows="3"></textarea>` : `<button type="button" class="btn btn-outline-light" onclick="window.location.href='././login.html'">Login to review</button>`}
 
     <div ${user ? "" : 'style="display: none"'} class="text-end">
       <button type="submit" class="review-btn btn btn-outline-light"
@@ -151,11 +212,14 @@ form.addEventListener("submit", async (event) => {
   const review = event.target.review.value.trim();
   if (!review) return;
 
+  if (!data || !data.volumeInfo) {
+    alert("Book data is not available. Cannot save review.");
+    return;
+  }
+
   const existingReviews = JSON.parse(
     localStorage.getItem(`reviews-${id}`) || "[]",
   );
-
-  await loadDetails();
 
   existingReviews.push({
     id,
@@ -197,5 +261,3 @@ function loadReviews() {
       .join("");
   }
 }
-
-loadReviews();

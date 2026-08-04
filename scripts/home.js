@@ -1,41 +1,81 @@
 import { API_KEY } from "./config.js";
 import { ratingStars } from "./config.js";
 import { shortenText } from "./config.js";
+import { handleError } from "./config.js";
 
 const spinner = document.getElementById("api-spinner");
 
 async function fetchBooks(section) {
   if (Array.isArray(section.query)) // Check if it's editor's list
   {
-    spinner.style.display = "block";
+    spinner?.style.display = "block";
     try {
       const allResponses = await Promise.all(
-        section.query.map(async (book) => {
+        section.query.map(async (id) => {
           const response = await fetch(
-            `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(book)}&key=${API_KEY}`,
+            `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
           );
-          const data = await response.json();
+          if (response.status === 503) {
+            console.error(
+              `Google Indexing Outage for query "${id}". This recommendation cannot be completed.`,
+            );
+            return null;
+          }
+          if (response.status === 429) {
+            console.error(
+              `Rate limit exceeded for query "${id}". This recommendation cannot be completed.`,
+            );
+            return null;
+          }
+          if (!response.ok) {
+            const error = new Error("HTTP connection failed");
+            error.status = response.status;
+            throw error;
+          }
+          const data = (await response.json()) || {};
           return data;
         }),
       );
-      const individualBooks = allResponses.map(
-        (response) => response.items?.[0],
-      );
-      const editorsList = { items: individualBooks };
-      console.log(editorsList);
-      return editorsList;
+      return { items: allResponses.filter((book) => book !== null) };
     } catch (error) {
       console.error("Error:", error);
+      handleError(error.status || 500, error.message);
+      return false;
     } finally {
-      spinner.style.display = "none";
+      spinner?.style.display = "none";
     }
   } else {
-    const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(section.query)}${section.orderBy ? `&orderBy=${section.orderBy}` : ""}&maxResults=20&key=${API_KEY}`,
-    );
-    const data = await response.json();
-    console.log(data);
-    return data;
+    try {
+      spinner?.style.display = "block";
+      const response = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(section.query)}${section.orderBy ? `&orderBy=${section.orderBy}` : ""}&maxResults=20&key=${API_KEY}`,
+      );
+      if (response.status === 503) {
+        console.error(
+          `Google Indexing Outage for query "${section.query}". This recommendation cannot be completed.`,
+        );
+        return false;
+      }
+      if (response.status === 429) {
+        console.error(
+          `Rate limit exceeded for query "${section.query}". This recommendation cannot be completed.`,
+        );
+        return false;
+      }
+      if (!response.ok) {
+        const error = new Error("HTTP connection failed");
+        error.status = response.status;
+        throw error;
+      }
+      const data = (await response.json()) || {};
+      return data;
+    } catch (error) {
+      console.error("Error:", error);
+      handleError(error.status || 500, error.message);
+      return false;
+    } finally {
+      spinner?.style.display = "none";
+    }
   }
 }
 
@@ -61,10 +101,7 @@ function buildCarousel(section, books) {
                         <a href="./books.html?id=${book.id}">
                           <img
                           class="rcm-book"
-                          src="${
-                            book.volumeInfo.imageLinks?.thumbnail ??
-                            "https://placehold.co/128x190?text=No+Image"
-                          }"
+                          src="${book.volumeInfo.imageLinks.thumbnail}"
                           />
                         </a>
                       </div>
@@ -100,15 +137,16 @@ function buildCarousel(section, books) {
 
 async function loadRcmBooks() {
   const editorsPicks = [
-    "Harry Potter and the Philosopher's Stone",
-    "Percy Jackson: The Lightning Thief",
-    "The Hunger Games",
-    "Powerless",
-    "The Maze Runner",
-    "The Martian",
-    "Heroes of Olympus: The Lost Hero",
-    "The Hobbit",
-    "Artemis Fowl: Opal Deception",
+    "YQNbEAAAQBAJ", // "Harry Potter and the Philosopher's Stone"
+    "ku9TsH3M1-YC", // "Percy Jackson: The Lightning Thief"
+    "hlb_sM1AN0gC", // "The Hunger Games"
+    "tjmlEQAAQBAJ", // "Powerless"
+    "6gfDfhmmHxMC", // "The Maze Runner"
+    "JeiGsRd4mywC", // "Heroes of Olympus: The Lost Hero"
+    "_kan_wrvIVoC", // "The City of Ember"
+    "HtfNL5MwRlYC", // "Steve Jobs: The Man Who Thought Different"
+    "0ahZNyx58BEC", // "Artemis Fowl: The Opal Deception"
+    "U799AY3yfqcC", // "The Hobbit"
   ];
 
   const homeRecommendations = [
@@ -127,8 +165,19 @@ async function loadRcmBooks() {
   let html = "";
   for (const section of homeRecommendations) {
     const books = await fetchBooks(section);
+    if (!books || !books.items || books.items.length === 0) {
+      console.log(books);
+      continue;
+    }
     books.items = books.items.filter((item) => item.volumeInfo?.imageLinks);
-    html += buildCarousel(section, books);
+    if (books.items.length > 0) html += buildCarousel(section, books);
+  }
+  if (html.trim() === "") {
+    html = `
+        <div class="text-center py-5">
+          <h4 class="txt-color mb-2">An error occurred while fetching recommendations.</h4>
+          <p class="txt-sec-color">Please try again later.</p>
+        </div>`;
   }
   document.getElementById("rcm-sections").innerHTML = html;
 }
@@ -140,6 +189,7 @@ const reviewKeys = Object.keys(localStorage).filter((key) =>
 const reviewKeysId = reviewKeys.map((key) => key.split("-")[1]);
 
 function loadHomeReviews() {
+  console.log(localStorage);
   const storageKeys = Object.keys(localStorage);
   const reviewKeys = storageKeys.filter((key) => key.startsWith("reviews-"));
 
@@ -167,7 +217,7 @@ function loadHomeReviews() {
         <div class="stars">
           ${ratingStars(review.rating)}
         </div>
-        <p class="txt-sec-color review-text">${shortenText(review.review, 170)}</p>
+        <p class="txt-sec-color review-text">${shortenText(review.review, 180)}</p>
         <p class="review-user">— ${review.user.username}</p>
       </div>
     </div>`;
@@ -177,6 +227,5 @@ function loadHomeReviews() {
 
   homeReviewsContainer.innerHTML = homeReviews;
 }
-console.log(localStorage);
 loadHomeReviews();
-loadRcmBooks();
+//loadRcmBooks();

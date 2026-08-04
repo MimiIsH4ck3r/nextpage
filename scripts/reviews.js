@@ -27,7 +27,7 @@ function loadReviews(searchedReviews) {
 
   if (allReviews.length === 0) {
     reviewContainer.innerHTML = `
-      <div class="text-center py-5">
+      <div class="text-center">
         <h4 class="txt-color mb-2">No Reviews Found</h4>
         <p class="txt-sec-color">Try adjusting your search keywords or add a new review.</p>
       </div>`;
@@ -73,7 +73,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
   const searchInput = document.getElementById("q");
   const query = searchInput.value.trim();
   if (!query) return;
-  spinner.style.display = "block";
+  spinner?.style.display = "block";
   try {
     const storageKeys = Object.keys(localStorage);
     const reviewKeys = storageKeys.filter((key) => key.startsWith("reviews-"));
@@ -93,7 +93,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    spinner.style.display = "none";
+    spinner?.style.display = "none";
   }
 });
 

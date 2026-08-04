@@ -7,9 +7,9 @@ form.addEventListener("submit", function (event) {
   if (!localStorage.getItem("users")) {
     alert("No user found");
   } else {
-    let users = JSON.parse(localStorage.getItem("users"));
-    let username = document.getElementById("username");
-    let password = document.getElementById("password");
+    const users = JSON.parse(localStorage.getItem("users"));
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
 
     if (
       users.find(
@@ -24,7 +24,8 @@ form.addEventListener("submit", function (event) {
           users.find(
             (index) =>
               index.username === username.value.trim() &&
-              index.password === password.value.trim(),
+              index.password === password.value.trim() &&
+              index.history,
           ),
         ),
       );

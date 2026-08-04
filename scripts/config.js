@@ -1,3 +1,5 @@
+//localStorage.clear();
+
 export const API_KEY = "AIzaSyBFp9esiRmoHXSH0sZ9gDfE9j3EeWQKKK4";
 
 export function ratingStars(rating) {
@@ -51,15 +53,29 @@ export const genresList = [
   "Young Adult",
 ];
 
+export function handleError(status, message) {
+  console.error(`Error (${status}):`, message);
+  window.location.href = `./error.html?status=${status}&message=${encodeURIComponent(message)}`;
+}
+
+const goBackButton = document.getElementById("goBack");
+if (goBackButton) {
+  goBackButton.addEventListener("click", () => {
+    if (window.location.pathname.includes("/error.html")) {
+      console.log("Redirecting to index.html");
+      window.location.href = "./index.html";
+    }
+    window.history.back();
+  });
+}
+
 window.signOut = () => {
   localStorage.removeItem("currentUser");
-  // localStorage.removeItem("cart");
   location.reload();
 };
 
 window.signIn = () => {};
 
-//// Nếu người dùng đăng đăng nhập.
 if (localStorage.getItem("currentUser")) {
   document.getElementById("profile-container").innerHTML += /*html*/ `
     <div tabindex="0" class="profile">

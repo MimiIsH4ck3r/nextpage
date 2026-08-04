@@ -252,3 +252,9 @@ footer {
     transform: rotateY(-180deg);
   }
 }
+
+#error-section {
+  display: flex;
+  align-items: center;
+  height: 60vh;
+}

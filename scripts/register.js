@@ -33,6 +33,7 @@ form.addEventListener("submit", (e) => {
         email,
         password,
         username,
+        history: [],
       });
 
       localStorage.setItem("users", JSON.stringify(users));
@@ -44,6 +45,7 @@ form.addEventListener("submit", (e) => {
             email,
             password,
             username,
+            history: [],
           },
         ]),
       );

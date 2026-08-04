@@ -1,6 +1,9 @@
 import { API_KEY } from "./config.js";
 import { shortenText } from "./config.js";
 import { genresList } from "./config.js";
+import { handleError } from "./config.js";
+
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 //localStorage.removeItem("history");
 function checkDate(bookDate, bookTime, currentDate, yesterday) {
@@ -15,7 +18,15 @@ function checkDate(bookDate, bookTime, currentDate, yesterday) {
 
 const recentBooks = document.getElementById("recentBooks");
 function loadRecentBooks() {
-  const history = JSON.parse(localStorage.getItem("history") || "[]");
+  if (!currentUser) {
+    recentBooks.innerHTML = `
+      <div class="text-center">
+        <h4 class="txt-color mb-2">Login to See Recent Books</h4>
+        <p class="txt-sec-color">Try browsing our collection with an account to see your recent views here.</p>
+      </div>`;
+    return;
+  }
+  const history = currentUser.history || [];
   console.log("History:", history);
 
   const currentDate = new Date()
@@ -31,10 +42,14 @@ function loadRecentBooks() {
   });
 
   if (history.length === 0) {
-    recentBooks.innerHTML = `<h3 class="txt-color">No recently viewed books.</h3>`;
+    recentBooks.innerHTML = `  
+      <div class="text-center">
+        <h4 class="txt-color mb-2">No Recently Viewed Books</h4>
+        <p class="txt-sec-color">Try browsing our collection to see your recent views here.</p>
+      </div>`;
   } else {
     let html = "";
-    html += history
+    html = history
       .slice(0, 6)
       .map((item) => {
         if (!item.timestamp) return "";
@@ -83,7 +98,8 @@ const recommendedBooks = document.getElementById("recommendedBooks");
 async function fetchRecommendedBooks() {
   let recommendAuthors = {};
   let recommendCategories = {};
-  const history = JSON.parse(localStorage.getItem("history") || "[]");
+  if (!currentUser) return [];
+  const history = currentUser.history || [];
   history.forEach((item) => {
     item.bookAuthors?.forEach((author) => {
       if (recommendAuthors[author]) {
@@ -121,10 +137,28 @@ async function fetchRecommendedBooks() {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(queryParam)}&maxResults=6&key=${API_KEY}`,
       );
+
+      if (response.status === 503) {
+        console.error(
+          `Google Indexing Outage for query "${searchKey}". This recommendation cannot be completed.`,
+        );
+        return [];
+      }
+      if (response.status === 429) {
+        console.error(
+          `Rate limit exceeded for query "${searchKey}". This recommendation cannot be completed.`,
+        );
+        return [];
+      }
+      if (!response.ok) {
+        const error = new Error("HTTP connection failed");
+        error.status = response.status;
+        throw error;
+      }
       const data = await response.json();
       return data.items || [];
     });
-
+    if (requests.length === 0) return false;
     const allItems = await Promise.all(requests);
 
     const results = allItems.flat();
@@ -149,19 +183,31 @@ async function fetchRecommendedBooks() {
       "Failed to fetch recommendation items from Google Books:",
       error,
     );
-    return;
+    handleError(error.status || 500, error);
+    return false;
   }
 }
 
 async function loadRecommendedBooks() {
   const fetchResults = await fetchRecommendedBooks();
-
+  if (fetchResults == 429) {
+    recommendedBooks.innerHTML = `      
+      <div class="text-center py-5">
+        <h4 class="txt-color mb-2">Rate Limit Exceeded</h4>
+        <p class="txt-sec-color">Please try again later.</p>
+      </div>`;
+    return false;
+  }
   if (!fetchResults || fetchResults.length === 0) {
-    recommendedBooks.innerHTML = `<h3 class="txt-color">No recommendations yet.</h3>`;
-    return;
+    recommendedBooks.innerHTML = `      
+      <div class="text-center py-5">
+        <h4 class="txt-color mb-2">No Recommendations Available</h4>
+        <p class="txt-sec-color">Try browsing our collection to see personalized recommendations here.</p>
+      </div>`;
+    return false;
   } else {
     let html = "";
-    html += fetchResults
+    html = fetchResults
       .map((item) => {
         return `
         <div class="col-lg-6 col-md-12">
@@ -204,6 +250,13 @@ function getTop(scoreObject, limit) {
 }
 
 window.addEventListener("pageshow", (event) => {
+  console.log("Pageshow fired. Persisted from cache?", event.persisted);
+
+  const freshUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (freshUser) {
+    currentUser.history = freshUser.history || [];
+  }
+
   loadRecentBooks();
 });
 loadRecommendedBooks();
