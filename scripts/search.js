@@ -4,7 +4,7 @@ import { genresList } from "./config.js";
 import { handleError } from "./config.js";
 
 const result = document.getElementById("results");
-const pagination = document.getElementById("paginationPages");
+const pagination = document.getElementById("pagination");
 const filter = document.querySelector(".div-filter");
 
 const searchParams = new URLSearchParams(location.search);
@@ -34,18 +34,20 @@ function loadFilterList() {
     })
     .join("");
 
-  exGenresMenu.innerHTML = genresList.map((genre) => {
-    const fixedGenre = genre
-      .toLowerCase()
-      .replaceAll(" ", "-")
-      .replaceAll("&", "and");
-    return `<li>
+  exGenresMenu.innerHTML = genresList
+    .map((genre) => {
+      const fixedGenre = genre
+        .toLowerCase()
+        .replaceAll(" ", "-")
+        .replaceAll("&", "and");
+      return `<li>
       <div class="form-check">
         <input class="form-check-input" type="checkbox" name="exclude-genres" id="ex-${fixedGenre}" value="${genre}"/>
         <label class="form-check-label" for="ex-${fixedGenre}">${genre}</label>
       </div>
     </li>`;
-  });
+    })
+    .join("");
 }
 loadFilterList();
 
@@ -66,10 +68,8 @@ let startIndex = 0;
 let currentPage = 1;
 let totalItemsCount = 0;
 
-document.getElementById("prevBtn").addEventListener("click", previous);
-document.getElementById("nextBtn").addEventListener("click", next);
-
-function previous() {
+function previous(event) {
+  if (event) event.preventDefault();
   if (currentPage > 1) {
     currentPage -= 1;
     startIndex = (currentPage - 1) * bookPerPage;
@@ -79,6 +79,7 @@ function previous() {
 }
 
 function next() {
+  if (event) event.preventDefault();
   const totalPages = Math.ceil(Math.min(totalItemsCount, 100) / bookPerPage);
   if (currentPage < totalPages) {
     currentPage += 1;
@@ -90,44 +91,60 @@ function next() {
 
 function loadBooks(books) {
   const totalPages = Math.ceil(Math.min(totalItemsCount, 100) / bookPerPage);
+  const searchHeadlineText =
+    query || (genres.length ? genres.join(", ") : excludeGenres.join(", "));
+  const totalFilters = genres.length + excludeGenres.length;
+  const isNoBooks = books.length === 0;
+  result.innerHTML = `
+    <div class="row g-4">
+      <h3 class="txt-color">${isNoBooks ? "No books found for" : "Search results for"} "${searchHeadlineText}" (${totalFilters} filter)</h3>
+      ${books
+        .map(
+          (book) => `
+            <div class="col-lg-6">
+              <div class="card-dark">
+                <div class="row align-items-center">
+                  <div class="col-md-4 text-center">
+                    <img src="${
+                      book.volumeInfo?.imageLinks?.thumbnail ??
+                      "https://placehold.co/128x190?text=No+Image"
+                    }" class="search-img" />
+                  </div>
 
-  result.innerHTML = `<div class="row g-4">
-${
-  books.length === 0
-    ? `<h3 class="txt-color">No books found for "${query ? query : genres ? genres : excludeGenres ? excludeGenres : ""}" (${genres.length + excludeGenres.length} filter)</h3>`
-    : `<h3 class="txt-color">Search results for "${query ? query : genres ? genres : excludeGenres ? excludeGenres : ""}" (${genres.length + excludeGenres.length} filter)</h3>` +
-      books
-        .map((book) => {
-          return `
-              <div class="col-lg-6">
-                <div class="card-dark">
-                  <div class="row align-items-center">
-                    <div class="col-md-4 text-center">
-                      <img src="${
-                        book.volumeInfo?.imageLinks?.thumbnail ??
-                        "https://placehold.co/128x190?text=No+Image"
-                      }" class="search-img" />
-                    </div>
-
-                    <div class="col-md-8">
-                      <h3 class="txt-color">${shortenText(book.volumeInfo?.title, 100) || "Untitled"}</h3>
-                      <p class="txt-sec-color">${shortenText(book.volumeInfo?.description, 150)}</p>
-                      <a href="./books.html?id=${book.id}&key=${API_KEY}" class="btn btn-outline-light">
-                        View Details
-                      </a>
-                    </div>
+                  <div class="col-md-8">
+                    <h3 class="txt-color">${shortenText(book.volumeInfo?.title, 100) || "Untitled"}</h3>
+                    <p class="txt-sec-color">${shortenText(book.volumeInfo?.description, 150)}</p>
+                    <a href="./books.html?id=${book.id}&key=${API_KEY}" class="btn btn-outline-light">
+                      View Details
+                    </a>
                   </div>
                 </div>
-              </div>`;
-        })
-        .join("")
-}
+              </div>
+            </div>`,
+        )
+        .join("")}
     </div>`;
   if (totalPages > 1) {
-    pagination.innerHTML = Array.from({ length: totalPages }, (_, index) => {
-      const pageNumber = index + 1;
-      return `<a page-number="${pageNumber}" class="txt-color btn btn-outline-light page-link page-link-number ${pageNumber === currentPage ? "active" : ""}">${pageNumber}</a>`;
-    }).join("");
+    pagination.innerHTML = `
+          <ul class="pagination">
+            <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+              <a href="#" class="txt-color btn btn-outline-light page-link" id="prevBtn"
+                >Previous</a
+              >
+            </li>
+            <div style="display: flex" id="paginationPages">
+            ${Array.from({ length: totalPages }, (_, index) => {
+              const pageNumber = index + 1;
+              return `<a page-number="${pageNumber}" class="txt-color btn btn-outline-light page-link page-link-number ${pageNumber === currentPage ? "active" : ""}">${pageNumber}</a>`;
+            }).join("")}</div>
+            <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+              <a href="#" class="txt-color btn btn-outline-light page-link" id="nextBtn"
+                >Next</a
+              >
+            </li>
+          </ul>`;
+    document.getElementById("prevBtn").addEventListener("click", previous);
+    document.getElementById("nextBtn").addEventListener("click", next);
   } else {
     pagination.innerHTML = "";
   }
@@ -137,7 +154,7 @@ async function searchBooks() {
   if (!query && genres.length === 0 && excludeGenres.length === 0) return;
 
   let finalBooks = [];
-  spinner?.style.display = "block";
+  spinner.style.display = "block";
   try {
     let apiQuery = encodeURIComponent(query || "");
 
@@ -152,16 +169,16 @@ async function searchBooks() {
     if (response.status === 503) {
       result.innerHTML = `
     <div class="text-center py-5">
-      <h3>Google Indexing Outage</h3>
-      <p>The query <strong>"${query}"</strong> triggered an internal Google routing error. This search cannot be completed.</p>
+      <h3 class="txt-color">Google Indexing Outage</h3>
+      <p class="txt-sec-color">The query <strong>"${query}"</strong> triggered an internal Google routing error. This search cannot be completed.</p>
     </div>
   `;
     }
     if (response.status === 429) {
       result.innerHTML = `
     <div class="text-center py-5">
-      <h3>Google Indexing Outage</h3>
-      <p>The query <strong>"${query}"</strong> triggered an internal Google routing error. This search cannot be completed.</p>
+      <h3 class="txt-color">Exceed Rate Limit</h3>
+      <p class="txt-sec-color">The query <strong>"${query}"</strong> triggered an internal Google routing error. This search cannot be completed.</p>
     </div>
   `;
       return;
@@ -176,31 +193,23 @@ async function searchBooks() {
     const fetchedBooks = data?.items || [];
     totalItemsCount = data?.totalItems || 0;
 
-    let uniqueItems = [];
-    for (const book of fetchedBooks) {
-      if (book && book.id) {
-        const alreadyExists = uniqueItems.some((item) => item.id === book.id);
-        if (!alreadyExists) {
-          uniqueItems.push(book);
-        }
-      }
-    }
-
     const lowerExcludeGenres = excludeGenres.map((genre) =>
       genre.toLowerCase(),
     );
-    const filteredData = uniqueItems.filter((book) => {
+    const filteredData = fetchedBooks.filter((book) => {
       const bookCategories = book.volumeInfo?.categories || [];
 
       const hasExcludedGenre = bookCategories.some((category) => {
-        const lowerCategory = category.toLowerCase();
         return lowerExcludeGenres.some((excluded) =>
-          lowerCategory.includes(excluded),
+          category.toLowerCase().includes(excluded),
         );
       });
 
       return !hasExcludedGenre;
     });
+    const droppedCount = fetchedBooks.length - filteredData.length;
+    totalItemsCount = Math.max(0, (data?.totalItems || 0) - droppedCount);
+
     console.log(filteredData);
 
     loadBooks(filteredData);
@@ -209,7 +218,7 @@ async function searchBooks() {
     handleError(error.status || 500, error);
     finalBooks = [];
   } finally {
-    spinner?.style.display = "none";
+    spinner.style.display = "none";
   }
 }
 

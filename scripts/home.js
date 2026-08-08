@@ -4,11 +4,12 @@ import { shortenText } from "./config.js";
 import { handleError } from "./config.js";
 
 const spinner = document.getElementById("api-spinner");
+const recommendedSection = document.getElementById("rcm-sections");
 
 async function fetchBooks(section) {
   if (Array.isArray(section.query)) // Check if it's editor's list
   {
-    spinner?.style.display = "block";
+    spinner.style.display = "block";
     try {
       const allResponses = await Promise.all(
         section.query.map(async (id) => {
@@ -16,16 +17,20 @@ async function fetchBooks(section) {
             `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
           );
           if (response.status === 503) {
-            console.error(
-              `Google Indexing Outage for query "${id}". This recommendation cannot be completed.`,
-            );
-            return null;
+            recommendedSection.innerHTML = `
+        <div class="text-center py-5">
+          <h3 class="txt-color">Google Indexing Outage for query "${section.query}".</h3>
+          <p class="txt-sec-color">This recommendation cannot be completed. Please try again later.</p>
+        </div>`;
+            return false;
           }
           if (response.status === 429) {
-            console.error(
-              `Rate limit exceeded for query "${id}". This recommendation cannot be completed.`,
-            );
-            return null;
+            recommendedSection.innerHTML = `
+        <div class="text-center py-5">
+        <h3 class="txt-color">Rate limit exceeded for query "${section.query}".</h3>
+        <p class="txt-sec-color">This recommendation cannot be completed. Please try again later.</p>
+        </div>`;
+            return false;
           }
           if (!response.ok) {
             const error = new Error("HTTP connection failed");
@@ -42,24 +47,28 @@ async function fetchBooks(section) {
       handleError(error.status || 500, error.message);
       return false;
     } finally {
-      spinner?.style.display = "none";
+      spinner.style.display = "none";
     }
   } else {
     try {
-      spinner?.style.display = "block";
+      spinner.style.display = "block";
       const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(section.query)}${section.orderBy ? `&orderBy=${section.orderBy}` : ""}&maxResults=20&key=${API_KEY}`,
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(section.query)}&maxResults=20&key=${API_KEY}`,
       );
       if (response.status === 503) {
-        console.error(
-          `Google Indexing Outage for query "${section.query}". This recommendation cannot be completed.`,
-        );
+        recommendedSection.innerHTML = `
+        <div class="text-center py-5">
+          <h3 class="txt-color">Google Indexing Outage for query "${section.query}".</h3>
+          <p class="txt-sec-color">This recommendation cannot be completed. Please try again later.</p>
+        </div>`;
         return false;
       }
       if (response.status === 429) {
-        console.error(
-          `Rate limit exceeded for query "${section.query}". This recommendation cannot be completed.`,
-        );
+        recommendedSection.innerHTML = `
+        <div class="text-center py-5">
+        <h3 class="txt-color">Rate limit exceeded for query "${section.query}".</h3>
+        <p class="txt-sec-color">This recommendation cannot be completed. Please try again later.</p>
+        </div>`;
         return false;
       }
       if (!response.ok) {
@@ -74,7 +83,7 @@ async function fetchBooks(section) {
       handleError(error.status || 500, error.message);
       return false;
     } finally {
-      spinner?.style.display = "none";
+      spinner.style.display = "none";
     }
   }
 }
@@ -154,7 +163,6 @@ async function loadRcmBooks() {
       id: "editorsPick",
       title: "Editor's Pick",
       query: editorsPicks,
-      orderBy: "newest",
     },
     {
       id: "famousFantasies",
@@ -179,7 +187,7 @@ async function loadRcmBooks() {
           <p class="txt-sec-color">Please try again later.</p>
         </div>`;
   }
-  document.getElementById("rcm-sections").innerHTML = html;
+  recommendedSection.innerHTML = html;
 }
 
 // Load home Reviews
@@ -201,6 +209,15 @@ function loadHomeReviews() {
   const homeReviewsContainer = document.querySelector("#reviewContainer");
   if (!homeReviewsContainer) return;
 
+  if (allReviews.length === 0) {
+    homeReviewsContainer.innerHTML = `
+      <div class="text-center py-5">
+        <h4 class="txt-color mb-2">No Reviews Available</h4>
+        <p class="txt-sec-color">Be the first to review a book!</p>
+      </div>`;
+    return;
+  }
+
   let homeReviews = `<div class="row g-4">
   ${allReviews
     .map((item, index) => {
@@ -212,13 +229,13 @@ function loadHomeReviews() {
         <img src="${
           review.bookThumbnail ?? "https://placehold.co/128x190?text=No+Image"
         }" 
-          alt="${review.bookTitle ?? "Book Cover"}" class="review-book" />
+          alt="${review.bookTitle ?? `Book Cover`}" class="review-book" />
         <h3 class="txt-color">${review.bookTitle ?? "Untitled Book"}</h3>
         <div class="stars">
           ${ratingStars(review.rating)}
         </div>
         <p class="txt-sec-color review-text">${shortenText(review.review, 180)}</p>
-        <p class="review-user">— ${review.user.username}</p>
+        <small class="review-user">— ${review.user.username}</small>
       </div>
     </div>`;
     })
@@ -228,4 +245,4 @@ function loadHomeReviews() {
   homeReviewsContainer.innerHTML = homeReviews;
 }
 loadHomeReviews();
-//loadRcmBooks();
+loadRcmBooks();

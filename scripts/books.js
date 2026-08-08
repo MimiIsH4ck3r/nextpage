@@ -49,7 +49,6 @@ async function updateHistory() {
 
   if (historyArray.length > 10) {
     historyArray = historyArray.slice(0, 10);
-    console.log("History array exceeded 10 items. Oldest item removed.");
   }
 
   currentUser.history = historyArray;
@@ -65,7 +64,7 @@ async function updateHistory() {
 
 async function loadDetails() {
   try {
-    spinner?.style.display = "block";
+    spinner.style.display = "block";
     const response = await fetch(
       `https://www.googleapis.com/books/v1/volumes/${id}?key=${API_KEY}`,
     );
@@ -97,7 +96,7 @@ async function loadDetails() {
     handleError(error.status || 500, error);
     return false;
   } finally {
-    spinner?.style.display = "none";
+    spinner.style.display = "none";
   }
 
   if (!data || !data.volumeInfo) {

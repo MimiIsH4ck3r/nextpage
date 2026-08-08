@@ -81,10 +81,6 @@ if (localStorage.getItem("currentUser")) {
     <div tabindex="0" class="profile">
       <img class="profile-img" src="./assets/default-profile-picture.jpg" alt="Profile picture">
       <nav class="popup">
-        <button class="profile-button" onclick=""> 
-          <i class=""></i>
-          <span> Profile</span>
-        </button> 
         <button class="profile-button" onclick="signOut()"> 
         <span> ${JSON.parse(localStorage.getItem("currentUser")).username}</span>
           <i class="fa-solid fa-right-from-bracket"></i>

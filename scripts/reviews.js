@@ -4,32 +4,34 @@ import { shortenText } from "./config.js";
 
 const reviewContainer = document.querySelector("#bookReviews");
 const spinner = document.getElementById("api-spinner");
+function getReviews() {
+  const storageKeys = Object.keys(localStorage);
+  const reviewKeys = storageKeys.filter((key) => key.startsWith("reviews-"));
+
+  return reviewKeys
+    .map((key) => JSON.parse(localStorage.getItem(key) || "[]"))
+    .flat();
+}
 
 function loadReviews(searchedReviews) {
-  let allReviews = [];
-  const isSearched = searchedReviews && searchedReviews.length > 0;
-  if (!searchedReviews) {
-    const storageKeys = Object.keys(localStorage);
-    const reviewKeys = storageKeys.filter((key) => key.startsWith("reviews-"));
-
-    allReviews = reviewKeys
-      .map((key) => {
-        const reviews = JSON.parse(localStorage.getItem(key) || "[]");
-        return reviews;
-      })
-      .flat();
-  } else {
-    allReviews = searchedReviews;
-  }
+  const isSearched = Array.isArray(searchedReviews);
+  const allReviews = isSearched ? searchedReviews : getReviews();
 
   console.log("All reviews:", allReviews);
-  console.log("searched reviews:", searchedReviews);
 
-  if (allReviews.length === 0) {
+  if (isSearched && allReviews.length === 0) {
     reviewContainer.innerHTML = `
       <div class="text-center">
         <h4 class="txt-color mb-2">No Reviews Found</h4>
         <p class="txt-sec-color">Try adjusting your search keywords or add a new review.</p>
+      </div>`;
+    return;
+  }
+  if (!isSearched && allReviews.length === 0) {
+    reviewContainer.innerHTML = `
+      <div class="text-center">
+        <h4 class="txt-color mb-2">No Reviews Available</h4>
+        <p class="txt-sec-color">Be the first to review a book!</p>
       </div>`;
     return;
   }
@@ -70,30 +72,21 @@ loadReviews();
 
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
-  const searchInput = document.getElementById("q");
   const query = searchInput.value.trim();
   if (!query) return;
-  spinner?.style.display = "block";
+  spinner.style.display = "block";
   try {
-    const storageKeys = Object.keys(localStorage);
-    const reviewKeys = storageKeys.filter((key) => key.startsWith("reviews-"));
-
-    let allReviews = reviewKeys
-      .map((key) => {
-        const reviews = JSON.parse(localStorage.getItem(key) || "[]");
-        return reviews;
-      })
-      .flat();
+    const allReviews = getReviews();
 
     const filteredReviews = allReviews.filter((item) =>
-      item.bookTitle.toLowerCase().includes(query.toLowerCase()),
+      item.bookTitle?.toLowerCase().includes(query.toLowerCase()),
     );
     console.log("Filtered Reviews:", filteredReviews);
     loadReviews(filteredReviews);
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    spinner?.style.display = "none";
+    spinner.style.display = "none";
   }
 });
 

@@ -94,6 +94,15 @@ function mapMainGenres(genres) {
   return genresList.filter((genre) => lowerText.includes(genre.toLowerCase()));
 }
 
+function getTop(scoreObject, limit) {
+  const entries = Object.entries(scoreObject);
+  if (entries.length === 0) return [];
+
+  const sortedEntries = entries.sort((a, b) => b[1] - a[1]);
+
+  return sortedEntries.slice(0, limit).map((entry) => entry[0]);
+}
+
 const recommendedBooks = document.getElementById("recommendedBooks");
 async function fetchRecommendedBooks() {
   let recommendAuthors = {};
@@ -118,8 +127,6 @@ async function fetchRecommendedBooks() {
       });
     });
   });
-
-  console.log(recommendAuthors, recommendCategories);
 
   const isAuthor = Math.round(Math.random());
   const topRecommendations =
@@ -161,19 +168,11 @@ async function fetchRecommendedBooks() {
     if (requests.length === 0) return false;
     const allItems = await Promise.all(requests);
 
-    const results = allItems.flat();
-    const finalBooks = [];
-    for (const book of results) {
-      const alreadyExists = finalBooks.some((item) => item.id === book.id);
-      if (!alreadyExists) {
-        finalBooks.push(book);
-      }
-    }
+    const finalBooks = allItems.flat();
     for (let i = finalBooks.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [finalBooks[i], finalBooks[j]] = [finalBooks[j], finalBooks[i]];
     }
-    console.log("Fetched books:", finalBooks);
     const books = finalBooks.slice(0, 6);
 
     console.log("Final Recommended Items Array:", books);
@@ -240,18 +239,7 @@ async function loadRecommendedBooks() {
   }
 }
 
-function getTop(scoreObject, limit) {
-  const entries = Object.entries(scoreObject);
-  if (entries.length === 0) return [];
-
-  const sortedEntries = entries.sort((a, b) => b[1] - a[1]);
-
-  return sortedEntries.slice(0, limit).map((entry) => entry[0]);
-}
-
 window.addEventListener("pageshow", (event) => {
-  console.log("Pageshow fired. Persisted from cache?", event.persisted);
-
   const freshUser = JSON.parse(localStorage.getItem("currentUser"));
   if (freshUser) {
     currentUser.history = freshUser.history || [];
