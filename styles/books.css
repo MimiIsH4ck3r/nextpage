@@ -79,13 +79,9 @@
   }
 }
 
-/* Coming-soon */
-#Coming-soon-title {
-  height: 56vh;
-}
-/* book001 reviews */
 #reviewContainer {
   display: flex;
+  flex-direction: column;
   justify-content: left;
 }
 

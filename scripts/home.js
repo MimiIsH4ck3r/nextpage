@@ -231,9 +231,7 @@ function loadHomeReviews() {
         }" 
           alt="${review.bookTitle ?? `Book Cover`}" class="review-book" />
         <h3 class="txt-color">${review.bookTitle ?? "Untitled Book"}</h3>
-        <div class="stars">
-          ${ratingStars(review.rating)}
-        </div>
+        <div class="stars">${ratingStars(review.rating)}</div>
         <p class="txt-sec-color review-text">${shortenText(review.review, 180)}</p>
         <small class="review-user">— ${review.user.username}</small>
       </div>

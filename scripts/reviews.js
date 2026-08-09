@@ -43,25 +43,21 @@ function loadReviews(searchedReviews) {
       if (!item) return "";
       return `<div class="col-lg-6 ${index === 2 ? "d-none d-sm-block" : ""}">
       <div class="card-dark">
-        <div class="d-flex align-items-center mb-3">
+        <div class="group-item d-flex align-items-center mb-3">
           <img src="${
             item.bookThumbnail ?? "https://placehold.co/128x190?text=No+Image"
           }" 
             alt="${item.bookTitle ?? "Book Cover"}" class="review-book" />
-            <div>
-                <h5 class="txt-color mb-1">
-                    ${item.bookTitle ?? "Untitled Book"}
-                </h5>
-                <small class="review-user">reviewed by ${item.user.username}</small>
-            </div>
+          <div>
+            <h5 class="txt-color mb-1"> ${item.bookTitle ?? "Untitled Book"}</h5>
+            <small class="review-user">reviewed by ${item.user.username}</small>
           </div>
-            <div class="stars">
-            ${ratingStars(item.rating)}
-            </div>
+        </div>
+        <div class="stars">${ratingStars(item.rating)}</div>
         <p class="txt-sec-color review-text">${shortenText(item.review, 170)}</p>
         <a href="./books.html?id=${item.id}" class="btn btn-outline-light"
-                >View Details
-              </a>
+          >View Details
+        </a>
       </div>
     </div>`;
     })

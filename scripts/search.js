@@ -101,23 +101,21 @@ function loadBooks(books) {
       ${books
         .map(
           (book) => `
-            <div class="col-lg-6">
+            <div class="col-md-6">
               <div class="card-dark">
-                <div class="row align-items-center">
-                  <div class="col-md-4 text-center">
-                    <img src="${
-                      book.volumeInfo?.imageLinks?.thumbnail ??
-                      "https://placehold.co/128x190?text=No+Image"
-                    }" class="search-img" />
-                  </div>
+                <div class="text-center">
+                  <img src="${
+                    book.volumeInfo?.imageLinks?.thumbnail ??
+                    "https://placehold.co/128x190?text=No+Image"
+                  }" class="search-img" />
+                </div>
 
-                  <div class="col-md-8">
-                    <h3 class="txt-color">${shortenText(book.volumeInfo?.title, 100) || "Untitled"}</h3>
-                    <p class="txt-sec-color">${shortenText(book.volumeInfo?.description, 150)}</p>
-                    <a href="./books.html?id=${book.id}&key=${API_KEY}" class="btn btn-outline-light">
-                      View Details
-                    </a>
-                  </div>
+                <div>
+                  <h3 class="txt-color">${shortenText(book.volumeInfo?.title, 100) || "Untitled"}</h3>
+                  <p class="txt-sec-color">${shortenText(book.volumeInfo?.description, 150)}</p>
+                  <a href="./books.html?id=${book.id}&key=${API_KEY}" class="btn btn-outline-light">
+                    View Details
+                  </a>
                 </div>
               </div>
             </div>`,
@@ -135,7 +133,7 @@ function loadBooks(books) {
             <div style="display: flex" id="paginationPages">
             ${Array.from({ length: totalPages }, (_, index) => {
               const pageNumber = index + 1;
-              return `<a page-number="${pageNumber}" class="txt-color btn btn-outline-light page-link page-link-number ${pageNumber === currentPage ? "active" : ""}">${pageNumber}</a>`;
+              return `<a class="txt-color btn btn-outline-light page-link page-link-number ${pageNumber === currentPage ? "active" : ""}">${pageNumber}</a>`;
             }).join("")}</div>
             <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
               <a href="#" class="txt-color btn btn-outline-light page-link" id="nextBtn"

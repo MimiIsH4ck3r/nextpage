@@ -61,15 +61,14 @@ function loadRecentBooks() {
         return `
         <div class="col-lg-6 col-md-12">
           <div class="featured-book card-light">
-            <div class="row align-items-center">
-              <div class="col-md-4 text-center">
+              <div class="text-center">
                 <img src="${
                   item.bookThumbnail ??
                   `https://placehold.co/128x190?text=No+Image`
                 }" class="featured-img" />
               </div>
 
-              <div class="col-md-8">
+              <div>
                 <h3 class="txt-color">
                   ${item.bookTitle || "Untitled"}
                 </h3>
@@ -79,7 +78,6 @@ function loadRecentBooks() {
 
                 <a href="./books.html?id=${item.id}" class="btn btn-outline-light">View Details</a>
               </div>
-            </div>
           </div>
         </div>
       `;
@@ -211,15 +209,14 @@ async function loadRecommendedBooks() {
         return `
         <div class="col-lg-6 col-md-12">
           <div class="featured-book card-light">
-            <div class="row align-items-center">
-              <div class="col-md-4 text-center">
+              <div class="text-center">
                 <img src="${
                   item.volumeInfo?.imageLinks?.thumbnail ??
                   `https://placehold.co/128x190?text=No+Image`
                 }" class="featured-img" />
               </div>
 
-              <div class="col-md-8">
+              <div>
                 <h3 class="txt-color">
                   ${shortenText(item.volumeInfo?.title, 40) || `Untitled`}
                 </h3>
@@ -229,7 +226,6 @@ async function loadRecommendedBooks() {
 
                 <a href="./books.html?id=${item.id}" class="btn btn-outline-light">View Details</a>
               </div>
-            </div>
           </div>
         </div>
       `;
